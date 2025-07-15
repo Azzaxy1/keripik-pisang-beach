@@ -1,176 +1,423 @@
 @extends('layouts.admin')
 
-@section('title', 'Orders Management')
+@section('title', 'Manajemen Pesanan')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Orders Management</h2>
-                <div class="btn-group">
-                    <button class="btn btn-outline-primary" onclick="filterOrders('all')">All Orders</button>
-                    <button class="btn btn-outline-warning" onclick="filterOrders('pending')">Pending</button>
-                    <button class="btn btn-outline-info" onclick="filterOrders('processing')">Processing</button>
-                    <button class="btn btn-outline-success" onclick="filterOrders('shipped')">Shipped</button>
-                    <button class="btn btn-outline-dark" onclick="filterOrders('delivered')">Delivered</button>
-                    <button class="btn btn-outline-danger" onclick="filterOrders('cancelled')">Cancelled</button>
-                </div>
-            </div>
-
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped" id="orders-table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Items</th>
-                                    <th>Total</th>
-                                    <th>Payment</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($orders as $order)
-                                <tr data-status="{{ $order->status }}">
-                                    <td>
-                                        <strong>#{{ $order->order_number }}</strong>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <strong>{{ $order->user->name }}</strong><br>
-                                            <small class="text-muted">{{ $order->user->email }}</small>
-                                        </div>
-                                    </td>
-                                    <td>{{ $order->created_at->format('M d, Y H:i') }}</td>
-                                    <td>{{ $order->order_items_count ?? $order->items->count() }}</td>
-                                    <td>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ $order->payment_status == 'paid' ? 'success' : ($order->payment_status == 'pending' ? 'warning' : 'danger') }}">
-                                            {{ ucfirst($order->payment_status) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <select class="form-select form-select-sm" onchange="updateOrderStatus({{ $order->id }}, this.value)">
-                                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
-                                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
-                                            <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
-                                            <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <button class="btn btn-sm btn-primary" onclick="printInvoice({{ $order->id }})">
-                                                <i class="fas fa-print"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header dengan filter dan stats -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Orders Management</h2>
+                    <div class="d-flex gap-2">
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary btn-sm" onclick="filterOrders('all')">Semua</button>
+                            <button class="btn btn-outline-warning btn-sm" onclick="filterOrders('pending')">Menunggu</button>
+                            <button class="btn btn-outline-info btn-sm"
+                                onclick="filterOrders('processing')">Diproses</button>
+                            <button class="btn btn-outline-success btn-sm"
+                                onclick="filterOrders('shipped')">Dikirim</button>
+                            <button class="btn btn-outline-dark btn-sm"
+                                onclick="filterOrders('delivered')">Diterima</button>
+                            <button class="btn btn-outline-danger btn-sm"
+                                onclick="filterOrders('cancelled')">Dibatalkan</button>
+                        </div>
                     </div>
-                    {{ $orders->links() }}
+                </div>
+
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th width="12%">No. Pesanan</th>
+                                        <th width="15%">Pelanggan</th>
+                                        <th width="10%">Tanggal</th>
+                                        <th width="8%">Item</th>
+                                        <th width="12%">Total</th>
+                                        <th width="10%">Pembayaran</th>
+                                        <th width="12%">Status</th>
+                                        <th width="8%">Bukti</th>
+                                        <th width="13%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($orders as $order)
+                                        <tr data-status="{{ $order->status }}" class="order-row">
+                                            <td>
+                                                <div>
+                                                    <strong class="text-primary">#{{ $order->order_number }}</strong>
+                                                    <br>
+                                                    <small
+                                                        class="text-muted">{{ $order->created_at->format('H:i') }}</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if ($order->user->avatar)
+                                                        <img src="{{ $order->user->avatar }}" alt="{{ $order->user->name }}"
+                                                            class="rounded-circle me-2"
+                                                            style="width: 30px; height: 30px; object-fit: cover;">
+                                                    @else
+                                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                            style="width: 30px; height: 30px; font-size: 12px;">
+                                                            {{ strtoupper(substr($order->user->name, 0, 1)) }}
+                                                        </div>
+                                                    @endif
+                                                    <div>
+                                                        <div class="fw-bold">{{ Str::limit($order->user->name, 15) }}</div>
+                                                        <small
+                                                            class="text-muted">{{ Str::limit($order->user->email, 20) }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    {{ $order->created_at->format('d M Y') }}
+                                                    <br>
+                                                    <small
+                                                        class="text-muted">{{ $order->created_at->diffForHumans() }}</small>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge bg-light text-dark">
+                                                    {{ $order->items->sum('quantity') }} item
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <strong>Rp
+                                                        {{ number_format((float) $order->total_amount, 0, ',', '.') }}</strong>
+                                                    @if ($order->discount_amount > 0)
+                                                        <br>
+                                                        <small class="text-success">-Rp
+                                                            {{ number_format((float) $order->discount_amount, 0, ',', '.') }}</small>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $paymentBadges = [
+                                                        'pending' => ['warning', 'Menunggu'],
+                                                        'paid' => ['success', 'Lunas'],
+                                                        'failed' => ['danger', 'Gagal'],
+                                                        'refunded' => ['info', 'Dikembalikan'],
+                                                    ];
+                                                    $payment = $paymentBadges[$order->payment_status] ?? [
+                                                        'secondary',
+                                                        'Unknown',
+                                                    ];
+                                                @endphp
+                                                <span class="badge bg-{{ $payment[0] }}">
+                                                    {{ $payment[1] }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $statusBadges = [
+                                                        'pending' => ['warning', 'Menunggu'],
+                                                        'confirmed' => ['info', 'Dikonfirmasi'],
+                                                        'processing' => ['primary', 'Diproses'],
+                                                        'shipped' => ['success', 'Dikirim'],
+                                                        'delivered' => ['dark', 'Diterima'],
+                                                        'cancelled' => ['danger', 'Dibatalkan'],
+                                                    ];
+                                                    $status = $statusBadges[$order->status] ?? ['secondary', 'Unknown'];
+                                                @endphp
+                                                <select class="form-select form-select-sm status-select"
+                                                    onchange="updateOrderStatus({{ $order->id }}, this.value)"
+                                                    data-order-id="{{ $order->id }}">
+                                                    <option value="pending"
+                                                        {{ $order->status == 'pending' ? 'selected' : '' }}>Menunggu
+                                                    </option>
+                                                    <option value="confirmed"
+                                                        {{ $order->status == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi
+                                                    </option>
+                                                    <option value="processing"
+                                                        {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses
+                                                    </option>
+                                                    <option value="shipped"
+                                                        {{ $order->status == 'shipped' ? 'selected' : '' }}>Dikirim
+                                                    </option>
+                                                    <option value="delivered"
+                                                        {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima
+                                                    </option>
+                                                    <option value="cancelled"
+                                                        {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($order->payment_proof)
+                                                    <button class="btn btn-sm btn-outline-info"
+                                                        onclick="showPaymentProof('{{ asset('storage/' . $order->payment_proof) }}')"
+                                                        title="Lihat Bukti Pembayaran">
+                                                        <i class="fas fa-image"></i>
+                                                    </button>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{ route('admin.orders.show', $order) }}"
+                                                        class="btn btn-sm btn-outline-primary" title="Detail">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    @if ($order->payment_proof && $order->payment_status == 'pending')
+                                                        <button class="btn btn-sm btn-outline-success"
+                                                            onclick="approvePayment({{ $order->id }})"
+                                                            title="Terima Pembayaran">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    @endif
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                            data-bs-toggle="dropdown" title="Lainnya">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('admin.orders.print', $order) }}"
+                                                                    target="_blank">
+                                                                    <i class="fas fa-print me-2"></i>Cetak
+                                                                </a></li>
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('admin.orders.invoice', $order) }}"
+                                                                    target="_blank">
+                                                                    <i class="fas fa-file-invoice me-2"></i>Invoice
+                                                                </a></li>
+                                                            @if ($order->status == 'cancelled')
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li><a class="dropdown-item text-danger" href="#"
+                                                                        onclick="deleteOrder({{ $order->id }})">
+                                                                        <i class="fas fa-trash me-2"></i>Hapus
+                                                                    </a></li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <small class="text-muted">
+                                    Menampilkan {{ $orders->firstItem() ?? 0 }} - {{ $orders->lastItem() ?? 0 }}
+                                    dari {{ $orders->total() }} pesanan
+                                </small>
+                            </div>
+                            {{ $orders->links() }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Order Status Update Modal -->
-<div class="modal fade" id="statusModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Update Order Status</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to update the order status?</p>
-                <div id="status-details"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirm-status-update">Update Status</button>
+    <!-- Payment Proof Modal -->
+    <div class="modal fade" id="paymentProofModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bukti Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="payment-proof-image" src="" alt="Bukti Pembayaran" class="img-fluid">
+                </div>
+                <div class="modal-footer">
+                    <a id="download-proof" href="" download class="btn btn-success">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Status Update Confirmation Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Update Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin mengubah status pesanan?</p>
+                    <div id="status-details"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="confirm-status-update">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
+@push('styles')
+    <style>
+        .order-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-select {
+            font-size: 0.875rem;
+        }
+
+        .btn-group .btn {
+            border-radius: 0.25rem;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+        }
+    </style>
+@endpush
+
 @push('scripts')
-<script>
-$(document).ready(function() {
-    $('#orders-table').DataTable({
-        "pageLength": 25,
-        "ordering": true,
-        "searching": true,
-        "order": [[2, "desc"]]
-    });
-});
+    <script>
+        $(document).ready(function() {
+            $('#orders-table').DataTable({
+                "pageLength": 25,
+                "ordering": true,
+                "searching": true,
+                "order": [
+                    [2, "desc"]
+                ],
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [7, 8]
+                }]
+            });
+        });
 
-function filterOrders(status) {
-    var table = $('#orders-table').DataTable();
-    if (status === 'all') {
-        table.column(6).search('').draw();
-    } else {
-        table.column(6).search(status).draw();
-    }
-}
+        function filterOrders(status) {
+            var table = $('#orders-table').DataTable();
+            if (status === 'all') {
+                table.column(6).search('').draw();
+            } else {
+                table.column(6).search(status).draw();
+            }
 
-let pendingOrderId = null;
-let pendingStatus = null;
+            // Update button states
+            $('.btn-group button').removeClass('btn-primary').addClass('btn-outline-primary');
+            event.target.removeClass('btn-outline-primary').addClass('btn-primary');
+        }
 
-function updateOrderStatus(orderId, newStatus) {
-    pendingOrderId = orderId;
-    pendingStatus = newStatus;
-    
-    $('#status-details').html(`
-        <strong>Order ID:</strong> #${orderId}<br>
-        <strong>New Status:</strong> ${newStatus.toUpperCase()}
+        function showPaymentProof(imageSrc) {
+            $('#payment-proof-image').attr('src', imageSrc);
+            $('#download-proof').attr('href', imageSrc);
+            $('#paymentProofModal').modal('show');
+        }
+
+        let pendingOrderId = null;
+        let pendingStatus = null;
+
+        function updateOrderStatus(orderId, newStatus) {
+            pendingOrderId = orderId;
+            pendingStatus = newStatus;
+
+            const statusNames = {
+                'pending': 'Menunggu',
+                'confirmed': 'Dikonfirmasi',
+                'processing': 'Diproses',
+                'shipped': 'Dikirim',
+                'delivered': 'Diterima',
+                'cancelled': 'Dibatalkan'
+            };
+
+            $('#status-details').html(`
+        <strong>No. Pesanan:</strong> #${orderId}<br>
+        <strong>Status Baru:</strong> ${statusNames[newStatus]}
     `);
-    
-    $('#statusModal').modal('show');
-}
 
-$('#confirm-status-update').click(function() {
-    if (pendingOrderId && pendingStatus) {
-        $.ajax({
-            url: `/admin/orders/${pendingOrderId}/status`,
-            method: 'PATCH',
-            data: {
-                status: pendingStatus,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                $('#statusModal').modal('hide');
-                location.reload();
-            },
-            error: function(xhr) {
-                alert('Error updating order status');
-                location.reload();
+            $('#statusModal').modal('show');
+        }
+
+        $('#confirm-status-update').click(function() {
+            if (pendingOrderId && pendingStatus) {
+                $.ajax({
+                    url: `/admin/orders/${pendingOrderId}/status`,
+                    method: 'PATCH',
+                    data: {
+                        status: pendingStatus,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $('#statusModal').modal('hide');
+                        toastr.success('Status pesanan berhasil diperbarui');
+                        setTimeout(() => location.reload(), 1000);
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error updating order status');
+                        location.reload();
+                    }
+                });
             }
         });
-    }
-});
 
-function printInvoice(orderId) {
-    window.open(`/admin/orders/${orderId}/invoice`, '_blank');
-}
-</script>
+        function approvePayment(orderId) {
+            if (confirm('Apakah Anda yakin ingin menyetujui pembayaran ini?')) {
+                $.ajax({
+                    url: `/admin/orders/${orderId}/payment-status`,
+                    method: 'PATCH',
+                    data: {
+                        payment_status: 'paid',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        toastr.success('Pembayaran telah disetujui');
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error approving payment');
+                    }
+                });
+            }
+        }
+
+        function deleteOrder(orderId) {
+            if (confirm('Apakah Anda yakin ingin menghapus pesanan ini? Tindakan ini tidak dapat dibatalkan.')) {
+                $.ajax({
+                    url: `/admin/orders/${orderId}`,
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        toastr.success('Pesanan berhasil dihapus');
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error deleting order');
+                    }
+                });
+            }
+        }
+    </script>
 @endpush

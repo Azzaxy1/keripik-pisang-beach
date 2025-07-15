@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/order/success/{order}', [CheckoutController::class, 'success'])->name('order.success');
-    
+
     // Payment Routes
     Route::prefix('payment')->name('payment.')->group(function () {
         Route::get('/razorpay/{order}', [PaymentController::class, 'razorpay'])->name('razorpay');
@@ -81,25 +81,25 @@ Auth::routes();
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Categories
     Route::resource('categories', CategoryController::class);
-    
+
     // Brands
     Route::resource('brands', BrandController::class);
-    
+
     // Products
     Route::resource('products', ProductController::class);
     Route::delete('/products/image/delete', [ProductController::class, 'deleteImage'])->name('products.image.delete');
-    
+
     // Orders
-    Route::resource('orders', OrderController::class)->except(['create', 'store', 'edit']);
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
-    Route::patch('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.payment-status');
-    Route::post('/orders/{order}/note', [OrderController::class, 'addNote'])->name('orders.note');
-    Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
-    Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
-    
+    Route::resource('orders', OrderController::class)->only(['index', 'show', 'destroy']);
+    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::patch('orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
+    Route::post('orders/{order}/note', [OrderController::class, 'addNote'])->name('orders.addNote');
+    Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+
     // Users Management
     Route::resource('users', UserController::class);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
