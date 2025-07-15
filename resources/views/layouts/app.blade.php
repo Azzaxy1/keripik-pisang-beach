@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/x-icon">
 
     <title>@yield('title') - {{ config('app.name', 'E-Commerce Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <style>
         :root {
@@ -42,12 +44,12 @@
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
@@ -130,7 +132,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-store text-primary"></i>
+                <img src="images/logo.png" alt="Logo" style="width: 50px;">
                 {{ config('app.name', 'E-Commerce') }}
             </a>
 
@@ -150,7 +152,8 @@
 
                 <!-- Search Form -->
                 <form class="d-flex me-3" action="{{ route('search') }}" method="GET">
-                    <input class="form-control" type="search" name="q" placeholder="Search products..." value="{{ request('q') }}">
+                    <input class="form-control" type="search" name="q" placeholder="Search products..."
+                        value="{{ request('q') }}">
                     <button class="btn btn-outline-primary ms-2" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -180,14 +183,19 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">My Orders</a></li>
                                 <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a></li>
-                                @if(Auth::user()->hasRole('admin'))
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                                @if (Auth::user()->hasRole('admin'))
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                                    </li>
                                 @endif
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Logout
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -204,14 +212,14 @@
 
     <!-- Main Content -->
     <main>
-        @if(session('success'))
+        @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show m-0" role="alert">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        @if(session('error'))
+        @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show m-0" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -276,7 +284,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -288,7 +296,7 @@
         });
 
         function updateCartCount() {
-            $.get('{{ route("cart.count") }}', function(data) {
+            $.get('{{ route('cart.count') }}', function(data) {
                 $('#cart-count').text(data.count);
             });
         }
@@ -301,7 +309,7 @@
                 }
             });
 
-            $.post('{{ route("cart.add") }}', {
+            $.post('{{ route('cart.add') }}', {
                 product_id: productId,
                 quantity: quantity
             }, function(response) {
@@ -326,11 +334,13 @@
                     </div>
                 </div>
             `;
-            
+
             if (!$('#toast-container').length) {
-                $('body').append('<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1051;"></div>');
+                $('body').append(
+                    '<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1051;"></div>'
+                );
             }
-            
+
             $('#toast-container').append(toast);
             $('.toast').last().toast('show');
         }
@@ -338,4 +348,5 @@
 
     @stack('scripts')
 </body>
+
 </html>
