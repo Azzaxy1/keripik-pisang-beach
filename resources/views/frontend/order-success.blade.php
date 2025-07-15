@@ -95,8 +95,8 @@
                                             </div>
                                         </td>
                                         <td>{{ $item->quantity }}</td>
-                                        <td>₹{{ number_format($item->price, 2) }}</td>
-                                        <td>₹{{ number_format($item->total, 2) }}</td>
+                                        <td>Rp {{ number_format((float)$item->price, 0, ",", ".") }}</td>
+                                        <td>Rp {{ number_format((float)$item->total, 0, ",", ".") }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -110,17 +110,17 @@
                             <div class="border rounded p-3 bg-light">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Subtotal:</span>
-                                    <span>₹{{ number_format($order->subtotal, 2) }}</span>
+                                    <span>Rp {{ number_format((float)$order->subtotal, 0, ",", ".") }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Tax:</span>
-                                    <span>₹{{ number_format($order->tax_amount, 2) }}</span>
+                                    <span>Rp {{ number_format((float)$order->tax_amount, 0, ",", ".") }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Shipping:</span>
                                     <span>
                                         @if($order->shipping_amount > 0)
-                                            ₹{{ number_format($order->shipping_amount, 2) }}
+                                            Rp {{ number_format((float)$order->shipping_amount, 0, ",", ".") }}
                                         @else
                                             Free
                                         @endif
@@ -129,13 +129,13 @@
                                 @if($order->payment_method === 'cod')
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>COD Charges:</span>
-                                    <span>₹50.00</span>
+                                    <span>Rp 5.000</span>
                                 </div>
                                 @endif
                                 <hr>
                                 <div class="d-flex justify-content-between h5">
                                     <strong>Total:</strong>
-                                    <strong>₹{{ number_format($order->total_amount, 2) }}</strong>
+                                    <strong>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</strong>
                                 </div>
                             </div>
                         </div>

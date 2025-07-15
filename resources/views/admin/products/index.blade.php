@@ -49,10 +49,10 @@
                                     <td>{{ Str::limit($product->name, 30) }}</td>
                                     <td>{{ $product->category->name ?? 'N/A' }}</td>
                                     <td>{{ $product->brand->name ?? 'N/A' }}</td>
-                                    <td>₹{{ number_format($product->price, 2) }}</td>
+                                    <td>Rp {{ number_format((float)$product->price, 0, ",", ".") }}</td>
                                     <td>
                                         @if($product->sale_price)
-                                            ₹{{ number_format($product->sale_price, 2) }}
+                                            Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}
                                         @else
                                             -
                                         @endif

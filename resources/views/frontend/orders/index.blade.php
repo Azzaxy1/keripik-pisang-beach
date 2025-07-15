@@ -31,7 +31,7 @@
                                             {{ ucfirst($order->status) }}
                                         </span>
                                         <div class="mt-1">
-                                            <strong>₹{{ number_format($order->total_amount, 2) }}</strong>
+                                            <strong>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</strong>
                                         </div>
                                     </div>
                                 </div>

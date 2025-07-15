@@ -36,7 +36,7 @@ class PaymentController extends Controller
         $razorpayOrder = $api->order->create([
             'receipt' => $order->order_number,
             'amount' => $order->total_amount * 100, // Amount in paise
-            'currency' => 'INR',
+            'currency' => 'IDR',
             'notes' => [
                 'order_id' => $order->id,
                 'user_id' => $order->user_id
@@ -48,7 +48,7 @@ class PaymentController extends Controller
             'razorpayOrder' => $razorpayOrder,
             'razorpayId' => $this->razorpayId,
             'amount' => $order->total_amount * 100,
-            'currency' => 'INR',
+            'currency' => 'IDR',
             'name' => config('app.name'),
             'description' => 'Order Payment',
             'prefill' => [
@@ -128,7 +128,7 @@ class PaymentController extends Controller
                 'order_id' => $order->id,
                 'user_id' => $order->user_id,
                 'amount' => $order->total_amount,
-                'currency' => 'INR',
+                'currency' => 'IDR',
                 'status' => 'failed',
                 'payment_method' => 'razorpay',
                 'transaction_id' => $request->razorpay_payment_id ?? null,

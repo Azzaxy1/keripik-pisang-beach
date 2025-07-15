@@ -70,9 +70,9 @@
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div class="price">
-                                        <span class="fw-bold text-primary">₹{{ number_format($product->price, 2) }}</span>
+                                        <span class="fw-bold text-primary">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                         @if($product->compare_price && $product->compare_price > $product->price)
-                                            <small class="text-muted text-decoration-line-through ms-1">₹{{ number_format($product->compare_price, 2) }}</small>
+                                            <small class="text-muted text-decoration-line-through ms-1">Rp {{ number_format((float)$product->compare_price, 0, ",", ".") }}</small>
                                         @endif
                                     </div>
                                     @if($product->reviews_count > 0)

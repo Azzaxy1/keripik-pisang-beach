@@ -35,10 +35,10 @@
                                 </div>
                             </div>
                             <div class="col-md-2 text-end">
-                                <strong>₹{{ number_format($item->price, 2) }}</strong>
+                                <strong>Rp {{ number_format((float)$item->price, 0, ",", ".") }}</strong>
                             </div>
                             <div class="col-md-2 text-end">
-                                <strong class="item-subtotal">₹{{ number_format($item->subtotal, 2) }}</strong>
+                                <strong class="item-subtotal">Rp {{ number_format((float)$item->subtotal, 0, ",", ".") }}</strong>
                                 <br>
                                 <button class="btn btn-sm btn-outline-danger mt-1" onclick="removeItem({{ $item->id }})">
                                     <i class="fas fa-trash"></i>
@@ -59,20 +59,20 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal:</span>
-                            <span id="cart-subtotal">₹{{ number_format($total, 2) }}</span>
+                            <span id="cart-subtotal">Rp {{ number_format((float)$total, 0, ",", ".") }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Shipping:</span>
-                            <span id="shipping-cost">{{ $total > 500 ? 'Free' : '₹50.00' }}</span>
+                            <span id="shipping-cost">{{ $total > 50000 ? 'Free' : 'Rp 5.000' }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Tax (18%):</span>
-                            <span id="tax-amount">₹{{ number_format($total * 0.18, 2) }}</span>
+                            <span id="tax-amount">Rp {{ number_format($total * 0.18, 0, ",", ".") }}</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mb-3">
                             <strong>Total:</strong>
-                            <strong id="cart-total">₹{{ number_format($total + ($total > 500 ? 0 : 50) + ($total * 0.18), 2) }}</strong>
+                            <strong id="cart-total">Rp {{ number_format($total + ($total > 50000 ? 0 : 5000) + ($total * 0.18), 0, ",", ".") }}</strong>
                         </div>
                         
                         @auth
@@ -121,7 +121,7 @@ function updateQuantity(itemId, quantity) {
     }, function(response) {
         if (response.success) {
             // Update the item subtotal
-            $('[data-item-id="' + itemId + '"] .item-subtotal').text('₹' + parseFloat(response.subtotal).toFixed(2));
+            $('[data-item-id="' + itemId + '"] .item-subtotal').text('Rp ' + parseFloat(response.subtotal).toLocaleString('id-ID'));
             
             // Update cart totals
             updateCartTotals(response.total);
@@ -177,10 +177,10 @@ function updateCartTotals(subtotal) {
     const tax = subtotal * 0.18;
     const total = subtotal + shipping + tax;
     
-    $('#cart-subtotal').text('₹' + parseFloat(subtotal).toFixed(2));
-    $('#shipping-cost').text(shipping === 0 ? 'Free' : '₹' + shipping.toFixed(2));
-    $('#tax-amount').text('₹' + tax.toFixed(2));
-    $('#cart-total').text('₹' + total.toFixed(2));
+    $('#cart-subtotal').text('Rp ' + parseFloat(subtotal).toLocaleString('id-ID'));
+    $('#shipping-cost').text(shipping === 0 ? 'Free' : 'Rp ' + shipping.toLocaleString('id-ID'));
+    $('#tax-amount').text('Rp ' + tax.toLocaleString('id-ID'));
+    $('#cart-total').text('Rp ' + total.toLocaleString('id-ID'));
 }
 </script>
 @endpush

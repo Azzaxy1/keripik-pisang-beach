@@ -62,9 +62,9 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <strong>₹{{ number_format($order->total_amount, 2) }}</strong>
+                                            <strong>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</strong>
                                             @if($order->discount_amount > 0)
-                                                <br><small class="text-success">-₹{{ number_format($order->discount_amount, 2) }} discount</small>
+                                                <br><small class="text-success">-Rp {{ number_format((float)$order->discount_amount, 0, ",", ".") }} discount</small>
                                             @endif
                                         </td>
                                         <td>

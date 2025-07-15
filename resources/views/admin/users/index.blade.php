@@ -138,7 +138,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $user->orders_count ?? 0 }}</td>
-                                    <td>₹{{ number_format($user->total_spent ?? 0, 2) }}</td>
+                                    <td>Rp {{ number_format(user->total_spent ?? 0, 0, ",", ".") }}</td>
                                     <td>{{ $user->created_at->format('M d, Y') }}</td>
                                     <td>
                                         <div class="btn-group" role="group">

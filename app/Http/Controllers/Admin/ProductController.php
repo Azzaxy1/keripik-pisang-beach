@@ -27,9 +27,6 @@ class ProductController extends Controller
         $categories = Category::where('status', true)->get();
         $brands = Brand::where('status', true)->get();
 
-        // cek isi data array dd categories
-        // dd($categories);
-
         return view('admin.products.create', compact('categories', 'brands'));
     }
 
@@ -212,7 +209,7 @@ class ProductController extends Controller
 
             ProductImage::create([
                 'product_id' => $product->id,
-                'image_path' => $imageUrl,
+                'image' => $imageUrl,
                 'alt_text' => $product->name,
                 'sort_order' => $index
             ]);

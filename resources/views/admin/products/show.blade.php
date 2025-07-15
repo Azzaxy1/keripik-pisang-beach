@@ -70,12 +70,12 @@
                             <div class="row mt-3">
                                 <div class="col-md-3">
                                     <strong>Regular Price:</strong>
-                                    <p class="h5 text-primary">₹{{ number_format($product->price, 2) }}</p>
+                                    <p class="h5 text-primary">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</p>
                                 </div>
                                 @if($product->sale_price)
                                 <div class="col-md-3">
                                     <strong>Sale Price:</strong>
-                                    <p class="h5 text-success">₹{{ number_format($product->sale_price, 2) }}</p>
+                                    <p class="h5 text-success">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</p>
                                 </div>
                                 @endif
                                 <div class="col-md-3">

@@ -12,7 +12,6 @@ class ProductImage extends Model
     protected $fillable = [
         'product_id',
         'image',
-        'image_path',
         'alt_text',
         'sort_order'
     ];
@@ -30,7 +29,7 @@ class ProductImage extends Model
     // Accessors
     public function getImageUrlAttribute()
     {
-        $imagePath = $this->image_path ?: $this->image;
+        $imagePath = $this->image;
         
         if (!$imagePath) {
             return asset('images/no-image.png');

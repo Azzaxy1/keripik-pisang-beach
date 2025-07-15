@@ -182,7 +182,7 @@
                                         id="cod">
                                     <label class="form-check-label" for="cod">
                                         <i class="fas fa-money-bill-wave me-2"></i>
-                                        Cash on Delivery (₹50 extra charges)
+                                        Cash on Delivery (Rp 50 extra charges)
                                     </label>
                                 </div>
                             </div>
@@ -253,7 +253,7 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <strong>₹{{ number_format($item->subtotal, 2) }}</strong>
+                                    <strong>Rp {{ number_format((float)$item->subtotal, 0, ",", ".") }}</strong>
                                 </div>
                             </div>
                         @endforeach
@@ -261,17 +261,17 @@
                         <div class="border-top pt-3">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Subtotal:</span>
-                                <span>₹{{ number_format($subtotal, 2) }}</span>
+                                <span>Rp {{ number_format((float)$subtotal, 0, ",", ".") }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Tax (18% GST):</span>
-                                <span>₹{{ number_format($tax, 2) }}</span>
+                                <span>Rp {{ number_format((float)$tax, 0, ",", ".") }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Shipping:</span>
                                 <span id="shipping-cost">
                                     @if ($shipping > 0)
-                                        ₹{{ number_format($shipping, 2) }}
+                                        Rp {{ number_format((float)$shipping, 0, ",", ".") }}
                                     @else
                                         Free
                                     @endif
@@ -279,12 +279,12 @@
                             </div>
                             <div id="cod-charges" class="d-flex justify-content-between mb-2 d-none">
                                 <span>COD Charges:</span>
-                                <span>₹50.00</span>
+                                <span>Rp 5.000</span>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between h5">
                                 <strong>Total:</strong>
-                                <strong id="total-amount">₹{{ number_format($total, 2) }}</strong>
+                                <strong id="total-amount">Rp {{ number_format((float)$total, 0, ",", ".") }}</strong>
                             </div>
                         </div>
 
@@ -346,7 +346,7 @@
                 }
 
                 let newTotal = baseTotal + codCharges;
-                $('#total-amount').text('₹' + newTotal.toLocaleString('en-IN', {
+                $('#total-amount').text('Rp ' + newTotal.toLocaleString('id-ID', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 }));

@@ -55,7 +55,7 @@
                                     </td>
                                     <td>{{ $order->created_at->format('M d, Y H:i') }}</td>
                                     <td>{{ $order->order_items_count ?? $order->items->count() }}</td>
-                                    <td>₹{{ number_format($order->total_amount, 2) }}</td>
+                                    <td>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</td>
                                     <td>
                                         <span class="badge bg-{{ $order->payment_status == 'paid' ? 'success' : ($order->payment_status == 'pending' ? 'warning' : 'danger') }}">
                                             {{ ucfirst($order->payment_status) }}

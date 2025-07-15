@@ -150,7 +150,7 @@
                                             </td>
                                             <td>{{ $order->created_at->format('M d, Y') }}</td>
                                             <td>{{ $order->items->count() }}</td>
-                                            <td>₹{{ number_format($order->total_amount, 2) }}</td>
+                                            <td>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</td>
                                             <td>
                                                 <span class="badge bg-{{ $order->status == 'delivered' ? 'success' : ($order->status == 'cancelled' ? 'danger' : 'warning') }}">
                                                     {{ ucfirst($order->status) }}
@@ -180,7 +180,7 @@
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Total Spent:</span>
-                                <strong>₹{{ number_format($stats['total_spent'], 2) }}</strong>
+                                <strong>Rp {{ number_format(stats['total_spent'], 0, ",", ".") }}</strong>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Pending Orders:</span>

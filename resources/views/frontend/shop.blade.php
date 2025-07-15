@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             @if($priceRange)
-                            <small class="text-muted">Range: ₹{{ number_format($priceRange->min_price) }} - ₹{{ number_format($priceRange->max_price) }}</small>
+                            <small class="text-muted">Range: Rp {{ number_format((float)$priceRange->min_price, 0, ',', '.') }} - Rp {{ number_format((float)$priceRange->max_price, 0, ',', '.') }}</small>
                             @endif
                         </div>
 
@@ -140,10 +140,10 @@
                                 <div class="mt-auto">
                                     <div class="price-section mb-3">
                                         @if($product->sale_price && $product->sale_price < $product->price)
-                                            <span class="price-sale h6">₹{{ number_format($product->sale_price, 2) }}</span>
-                                            <span class="price-original small ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                            <span class="price-sale h6">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
+                                            <span class="price-original small ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                         @else
-                                            <span class="h6">₹{{ number_format($product->price, 2) }}</span>
+                                            <span class="h6">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                         @endif
                                     </div>
                                     <div class="d-flex gap-2">

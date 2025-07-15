@@ -68,13 +68,13 @@
 
                 <div class="product-price mb-4">
                     @if($product->sale_price && $product->sale_price < $product->price)
-                        <span class="current-price h3 text-danger">₹{{ number_format($product->sale_price, 2) }}</span>
-                        <span class="original-price h5 text-muted text-decoration-line-through ms-2">₹{{ number_format($product->price, 2) }}</span>
+                        <span class="current-price h3 text-danger">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
+                        <span class="original-price h5 text-muted text-decoration-line-through ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                         <span class="discount-badge bg-danger text-white px-2 py-1 rounded ms-2">
                             {{ round((($product->price - $product->sale_price) / $product->price) * 100) }}% OFF
                         </span>
                     @else
-                        <span class="current-price h3 text-primary">₹{{ number_format($product->price, 2) }}</span>
+                        <span class="current-price h3 text-primary">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                     @endif
                 </div>
 
@@ -117,7 +117,7 @@
                 <!-- Product Features -->
                 <div class="product-features">
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-truck text-primary"></i> Free shipping on orders above ₹500</li>
+                        <li><i class="fas fa-truck text-primary"></i> Free shipping on orders above Rp 50.000</li>
                         <li><i class="fas fa-undo text-primary"></i> 30 days return policy</li>
                         <li><i class="fas fa-shield-alt text-primary"></i> 1 year warranty</li>
                     </ul>

@@ -130,10 +130,10 @@ class Product extends Model
         // Fallback to first image from images relationship
         $firstImage = $this->images()->first();
         if ($firstImage) {
-            if ($firstImage->image_path) {
-                return str_starts_with($firstImage->image_path, 'storage/') 
-                    ? asset($firstImage->image_path) 
-                    : asset('storage/products/' . $firstImage->image_path);
+            if ($firstImage->image) {
+                return str_starts_with($firstImage->image, 'storage/') 
+                    ? asset($firstImage->image) 
+                    : asset('storage/products/' . $firstImage->image);
             }
         }
         

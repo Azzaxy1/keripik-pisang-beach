@@ -118,7 +118,7 @@
                                                      class="rounded">
                                             </td>
                                             <td>{{ Str::limit($product->name, 30) }}</td>
-                                            <td>₹{{ number_format($product->price, 2) }}</td>
+                                            <td>Rp {{ number_format((float)$product->price, 0, ",", ".") }}</td>
                                             <td>{{ $product->stock_quantity }}</td>
                                             <td>
                                                 <span class="badge bg-{{ $product->status == 'active' ? 'success' : 'danger' }}">

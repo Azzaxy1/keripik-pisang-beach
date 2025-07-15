@@ -81,11 +81,11 @@
                                         <div class="price-section mb-3">
                                             @if ($product->sale_price && $product->sale_price < $product->price)
                                                 <span
-                                                    class="price-sale h6">₹{{ number_format($product->sale_price, 2) }}</span>
+                                                    class="price-sale h6">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
                                                 <span
-                                                    class="price-original small ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                                    class="price-original small ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @else
-                                                <span class="h6">₹{{ number_format($product->price, 2) }}</span>
+                                                <span class="h6">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @endif
                                         </div>
                                         <div class="d-flex gap-2">
@@ -138,11 +138,11 @@
                                         <div class="price-section mb-3">
                                             @if ($product->sale_price && $product->sale_price < $product->price)
                                                 <span
-                                                    class="price-sale h6">₹{{ number_format($product->sale_price, 2) }}</span>
+                                                    class="price-sale h6">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
                                                 <span
-                                                    class="price-original small ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                                    class="price-original small ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @else
-                                                <span class="h6">₹{{ number_format($product->price, 2) }}</span>
+                                                <span class="h6">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @endif
                                         </div>
                                         <div class="d-flex gap-2">
@@ -192,11 +192,11 @@
                                         <div class="price-section mb-3">
                                             @if ($product->sale_price && $product->sale_price < $product->price)
                                                 <span
-                                                    class="price-sale h6">₹{{ number_format($product->sale_price, 2) }}</span>
+                                                    class="price-sale h6">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
                                                 <span
-                                                    class="price-original small ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                                    class="price-original small ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @else
-                                                <span class="h6">₹{{ number_format($product->price, 2) }}</span>
+                                                <span class="h6">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
                                             @endif
                                         </div>
                                         <div class="d-flex gap-2">
@@ -229,7 +229,7 @@
                             <i class="fas fa-shipping-fast fa-3x text-primary"></i>
                         </div>
                         <h5>Fast Delivery</h5>
-                        <p class="text-muted">Free shipping on orders above ₹500</p>
+                        <p class="text-muted">Free shipping on orders above Rp 50.000</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">

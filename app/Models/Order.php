@@ -20,6 +20,8 @@ class Order extends Model
         'discount_amount',
         'payment_status',
         'payment_method',
+        'payment_proof',
+        'bank_account_info',
         'payment_id',
         'shipping_address_id',
         'billing_address_id',

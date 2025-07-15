@@ -99,7 +99,7 @@
                                                 </td>
                                                 <td>{{ $product->name }}</td>
                                                 <td><code>{{ $product->sku }}</code></td>
-                                                <td>₹{{ number_format($product->price, 2) }}</td>
+                                                <td>Rp {{ number_format((float)$product->price, 0, ",", ".") }}</td>
                                                 <td>{{ $product->stock_quantity }}</td>
                                                 <td>
                                                     @if($product->status)

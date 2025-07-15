@@ -70,7 +70,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Revenue</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">₹{{ number_format($totalRevenue, 2) }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp {{ number_format($totalRevenue, 0, ",", ".") }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
@@ -153,7 +153,7 @@
                                             </a>
                                         </td>
                                         <td>{{ $order->user->name }}</td>
-                                        <td>₹{{ number_format($order->total_amount, 2) }}</td>
+                                        <td>Rp {{ number_format((float)$order->total_amount, 0, ",", ".") }}</td>
                                         <td>
                                             <span class="badge bg-{{ $order->status == 'completed' ? 'success' : ($order->status == 'pending' ? 'warning' : 'info') }}">
                                                 {{ ucfirst($order->status) }}
@@ -221,7 +221,7 @@ const salesChart = new Chart(ctx, {
     data: {
         labels: monthNames,
         datasets: [{
-            label: 'Sales (₹)',
+            label: 'Sales (Rp)',
             data: salesData,
             borderColor: 'rgb(75, 192, 192)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
