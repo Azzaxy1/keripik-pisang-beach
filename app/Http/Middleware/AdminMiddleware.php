@@ -22,13 +22,13 @@ class AdminMiddleware
 
         $user = Auth::user();
 
-        // Check if user has admin role using Spatie Permission
-        if ($user->hasRole('admin')) {
+        // Check if user has admin or owner role using Spatie Permission
+        if ($user->hasRole(['admin', 'owner'])) {
             return $next($request);
         }
 
         // Alternative check: if the user is created as admin (fallback)
-        if ($user->email === 'admin@example.com' || $user->email === 'admin@ecommerce.com') {
+        if ($user->email === 'admin@example.com' || $user->email === 'admin@ecommerce.com' || $user->email === 'owner@keripikpisang.com') {
             return $next($request);
         }
 

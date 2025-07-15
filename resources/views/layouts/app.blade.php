@@ -87,7 +87,6 @@
             background-color: var(--dark-color);
             color: white;
             padding: 3rem 0 1rem 0;
-            margin-top: 5rem;
         }
 
         .price-original {
@@ -129,7 +128,8 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm "
+        style="position: sticky; top: 0; z-index: 1000;">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="images/logo.png" alt="Logo" style="width: 50px;">
@@ -183,7 +183,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">My Orders</a></li>
                                 <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a></li>
-                                @if (Auth::user()->hasRole('admin'))
+                                @if (Auth::user()->hasRole(['admin', 'owner']))
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -232,51 +232,52 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center mb-4">
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <h5>{{ config('app.name', 'E-Commerce') }}</h5>
-                    <p>Your one-stop shop for all your needs. We provide quality products at competitive prices.</p>
-                    <div class="social-links">
-                        <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <img src="{{ asset('images/logo.png') }}" alt="Keripik Pisang Beach" style="width: 60px;">
+                    <h5 class="mt-2 mb-1" style="font-weight: 700;">Keripik Pisang Beach</h5>
+                    <p class="mb-2">Rasakan renyahnya keripik pisang khas pantai, dibuat dari bahan alami dan tanpa
+                        pengawet. Nikmati camilan sehat dan lezat setiap hari!</p>
+                    <div class="social-links mt-3">
                         <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-4">
-                    <h6>Quick Links</h6>
+                    <h6 class="fw-bold">Navigasi</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('home') }}" class="text-light">Home</a></li>
-                        <li><a href="{{ route('shop') }}" class="text-light">Shop</a></li>
-                        <li><a href="#" class="text-light">About Us</a></li>
-                        <li><a href="#" class="text-light">Contact</a></li>
+                        <li><a href="{{ route('home') }}" class="text-light">Beranda</a></li>
+                        <li><a href="{{ route('shop') }}" class="text-light">Produk</a></li>
+                        <li><a href="#" class="text-light">Tentang Kami</a></li>
+                        <li><a href="#" class="text-light">Kontak</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
-                    <h6>Customer Service</h6>
+                    <h6 class="fw-bold">Bantuan</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-light">Help Center</a></li>
-                        <li><a href="#" class="text-light">Returns</a></li>
-                        <li><a href="#" class="text-light">Shipping Info</a></li>
-                        <li><a href="#" class="text-light">Track Your Order</a></li>
+                        <li><a href="#" class="text-light">FAQ</a></li>
+                        <li><a href="#" class="text-light">Cara Pemesanan</a></li>
+                        <li><a href="#" class="text-light">Pengiriman</a></li>
+                        <li><a href="#" class="text-light">Konfirmasi Pembayaran</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
-                    <h6>Contact Info</h6>
+                    <h6 class="fw-bold">Kontak Kami</h6>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-phone"></i> +91 12345 67890</li>
-                        <li><i class="fas fa-envelope"></i> info@ecommerce.com</li>
-                        <li><i class="fas fa-map-marker-alt"></i> New Delhi, India</li>
+                        <li><i class="fas fa-phone"></i> 0812-3456-7890</li>
+                        <li><i class="fas fa-envelope"></i> info@keripikpisangbeach.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jl. Pantai Indah No. 123, Cinangka, Banten</li>
                     </ul>
                 </div>
             </div>
             <hr class="my-4">
             <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+                <div class="col-md-7">
+                    <p class="mb-0">&copy; {{ date('Y') }} Keripik Pisang Beach. All rights reserved.</p>
                 </div>
-                <div class="col-md-6 text-end">
-                    <p class="mb-0">Made with <i class="fas fa-heart text-danger"></i> Keripik pisang beach</p>
+                <div class="col-md-5 text-end">
+                    <p class="mb-0">Cinta lokal, rasa nasional <i class="fas fa-heart text-danger"></i></p>
                 </div>
             </div>
         </div>

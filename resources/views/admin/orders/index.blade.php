@@ -15,9 +15,9 @@
                             <button class="btn btn-outline-warning btn-sm" onclick="filterOrders('pending')">Menunggu</button>
                             <button class="btn btn-outline-info btn-sm"
                                 onclick="filterOrders('processing')">Diproses</button>
-                            <button class="btn btn-outline-success btn-sm"
+                            <button class="btn btn-outline-primary btn-sm"
                                 onclick="filterOrders('shipped')">Dikirim</button>
-                            <button class="btn btn-outline-dark btn-sm"
+                            <button class="btn btn-outline-success btn-sm"
                                 onclick="filterOrders('delivered')">Diterima</button>
                             <button class="btn btn-outline-danger btn-sm"
                                 onclick="filterOrders('cancelled')">Dibatalkan</button>
@@ -124,36 +124,16 @@
                                                 @php
                                                     $statusBadges = [
                                                         'pending' => ['warning', 'Menunggu'],
-                                                        'confirmed' => ['info', 'Dikonfirmasi'],
-                                                        'processing' => ['primary', 'Diproses'],
-                                                        'shipped' => ['success', 'Dikirim'],
-                                                        'delivered' => ['dark', 'Diterima'],
+                                                        'processing' => ['info', 'Diproses'],
+                                                        'shipped' => ['primary', 'Dikirim'],
+                                                        'delivered' => ['success', 'Diterima'],
                                                         'cancelled' => ['danger', 'Dibatalkan'],
                                                     ];
                                                     $status = $statusBadges[$order->status] ?? ['secondary', 'Unknown'];
                                                 @endphp
-                                                <select class="form-select form-select-sm status-select"
-                                                    onchange="updateOrderStatus({{ $order->id }}, this.value)"
-                                                    data-order-id="{{ $order->id }}">
-                                                    <option value="pending"
-                                                        {{ $order->status == 'pending' ? 'selected' : '' }}>Menunggu
-                                                    </option>
-                                                    <option value="confirmed"
-                                                        {{ $order->status == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi
-                                                    </option>
-                                                    <option value="processing"
-                                                        {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses
-                                                    </option>
-                                                    <option value="shipped"
-                                                        {{ $order->status == 'shipped' ? 'selected' : '' }}>Dikirim
-                                                    </option>
-                                                    <option value="delivered"
-                                                        {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima
-                                                    </option>
-                                                    <option value="cancelled"
-                                                        {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan
-                                                    </option>
-                                                </select>
+                                                <span class="badge bg-{{ $status[0] }}">
+                                                    {{ $status[1] }}
+                                                </span>
                                             </td>
                                             <td class="text-center">
                                                 @if ($order->payment_proof)
@@ -212,17 +192,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <small class="text-muted">
-                                    Menampilkan {{ $orders->firstItem() ?? 0 }} - {{ $orders->lastItem() ?? 0 }}
-                                    dari {{ $orders->total() }} pesanan
-                                </small>
-                            </div>
-                            {{ $orders->links() }}
                         </div>
                     </div>
                 </div>
@@ -294,7 +263,38 @@
         }
 
         .badge {
-            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.5em 0.75em;
+        }
+
+        /* Warna badge status yang konsisten */
+        .badge.bg-warning {
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+
+        .badge.bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        .badge.bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .badge.bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .badge.bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        /* Highlight untuk status aktif di filter */
+        .btn-group .btn.active {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            color: white;
         }
     </style>
 @endpush
@@ -324,9 +324,19 @@
                 table.column(6).search(status).draw();
             }
 
-            // Update button states
-            $('.btn-group button').removeClass('btn-primary').addClass('btn-outline-primary');
-            event.target.removeClass('btn-outline-primary').addClass('btn-primary');
+            // Update button states - reset semua button terlebih dahulu
+            $('.btn-group button').each(function() {
+                var $btn = $(this);
+                var originalClass = $btn.data('original-class') || 'btn-outline-primary';
+                $btn.removeClass('btn-primary btn-secondary btn-success btn-warning btn-info btn-danger active')
+                    .addClass(originalClass);
+            });
+
+            // Set button yang aktif
+            $(event.target).removeClass(
+                    'btn-outline-primary btn-outline-secondary btn-outline-success btn-outline-warning btn-outline-info btn-outline-danger'
+                )
+                .addClass('btn-primary active');
         }
 
         function showPaymentProof(imageSrc) {

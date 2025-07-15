@@ -9,10 +9,21 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2>Pesanan #{{ $order->order_number }}</h2>
-                        <p class="text-muted mb-0">Dipesan pada {{ $order->created_at->format('d M Y \p\u\k\u\l H:i') }}</p>
+                        <p class="text-muted mb-0">Dipesan pada {{ $order->created_at->format('d M Y') }} pukul {{ $order->created_at->format('H:i') }}</p>
                     </div>
                     <span
-                        class="badge bg-{{ $order->status === 'delivered' ? 'success' : ($order->status === 'cancelled' ? 'danger' : 'warning') }} p-2">
+                        class="badge p-2
+                        @php
+$badgeColors = [
+                                'pending' => 'bg-warning',
+                                'confirmed' => 'bg-info',
+                                'processing' => 'bg-primary',
+                                'shipped' => 'bg-info',
+                                'delivered' => 'bg-success',
+                                'cancelled' => 'bg-danger',
+                                'refunded' => 'bg-secondary'
+                            ];
+                            echo $badgeColors[$order->status] ?? 'bg-secondary'; @endphp">
                         @php
                             $statusTranslations = [
                                 'pending' => 'Menunggu',
@@ -21,6 +32,7 @@
                                 'shipped' => 'Dikirim',
                                 'delivered' => 'Diterima',
                                 'cancelled' => 'Dibatalkan',
+                                'refunded' => 'Dikembalikan',
                             ];
                         @endphp
                         {{ $statusTranslations[$order->status] ?? ucfirst($order->status) }}
@@ -183,9 +195,7 @@
                             <div class="card-body">
                                 @if ($order->shipping_address)
                                     @php
-                                        $shippingAddr = is_string($order->shipping_address)
-                                            ? json_decode($order->shipping_address, true)
-                                            : $order->shipping_address;
+                                        $shippingAddr = $order->shipping_address;
                                     @endphp
                                     @if ($shippingAddr)
                                         <div class="address-details">
@@ -217,6 +227,27 @@
                                 <h5 class="mb-0">Informasi Pembayaran</h5>
                             </div>
                             <div class="card-body">
+                                <div class="mb-2">
+                                    <strong>Status Pembayaran:</strong>
+                                    @php
+                                        $paymentStatusTranslations = [
+                                            'pending' => 'Menunggu',
+                                            'paid' => 'Diterima',
+                                            'failed' => 'Gagal',
+                                            'refunded' => 'Dikembalikan',
+                                        ];
+                                        $paymentStatusColors = [
+                                            'pending' => 'warning',
+                                            'paid' => 'success',
+                                            'failed' => 'danger',
+                                            'refunded' => 'info',
+                                        ];
+                                    @endphp
+                                    <span
+                                        class="badge bg-{{ $paymentStatusColors[$order->payment_status] ?? 'secondary' }}">
+                                        {{ $paymentStatusTranslations[$order->payment_status] ?? ucfirst($order->payment_status) }}
+                                    </span>
+                                </div>
                                 <div class="mb-2">
                                     <strong>Bukti Pembayaran:</strong>
                                     @if ($order->payment_proof)

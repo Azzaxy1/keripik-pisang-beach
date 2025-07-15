@@ -237,8 +237,6 @@
                                         <select name="status" class="form-select" onchange="this.form.submit()">
                                             <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
                                                 Menunggu</option>
-                                            <option value="confirmed"
-                                                {{ $order->status == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi</option>
                                             <option value="processing"
                                                 {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses</option>
                                             <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
@@ -252,19 +250,18 @@
                                 </form>
 
                                 <div class="mb-3">
-                                    <span
-                                        class="badge bg-{{ $order->status == 'delivered' ? 'success' : ($order->status == 'cancelled' ? 'danger' : 'warning') }} p-2">
-                                        @php
-                                            $statusTranslations = [
-                                                'pending' => 'Menunggu',
-                                                'confirmed' => 'Dikonfirmasi',
-                                                'processing' => 'Diproses',
-                                                'shipped' => 'Dikirim',
-                                                'delivered' => 'Diterima',
-                                                'cancelled' => 'Dibatalkan',
-                                            ];
-                                        @endphp
-                                        {{ $statusTranslations[$order->status] ?? ucfirst($order->status) }}
+                                    @php
+                                        $statusBadges = [
+                                            'pending' => ['warning', 'Menunggu'],
+                                            'processing' => ['info', 'Diproses'],
+                                            'shipped' => ['primary', 'Dikirim'],
+                                            'delivered' => ['success', 'Diterima'],
+                                            'cancelled' => ['danger', 'Dibatalkan'],
+                                        ];
+                                        $statusConfig = $statusBadges[$order->status] ?? ['secondary', 'Unknown'];
+                                    @endphp
+                                    <span class="badge bg-{{ $statusConfig[0] }} p-2">
+                                        {{ $statusConfig[1] }}
                                     </span>
                                 </div>
                             </div>
@@ -297,17 +294,17 @@
                                     </div>
                                 </form>
 
-                                <span
-                                    class="badge bg-{{ $order->payment_status == 'paid' ? 'success' : ($order->payment_status == 'failed' ? 'danger' : 'warning') }}">
-                                    @php
-                                        $paymentStatusTranslations = [
-                                            'pending' => 'Menunggu',
-                                            'paid' => 'Lunas',
-                                            'failed' => 'Gagal',
-                                            'refunded' => 'Dikembalikan',
-                                        ];
-                                    @endphp
-                                    {{ $paymentStatusTranslations[$order->payment_status] ?? ucfirst($order->payment_status) }}
+                                @php
+                                    $paymentBadges = [
+                                        'pending' => ['warning', 'Menunggu'],
+                                        'paid' => ['success', 'Lunas'],
+                                        'failed' => ['danger', 'Gagal'],
+                                        'refunded' => ['info', 'Dikembalikan'],
+                                    ];
+                                    $paymentConfig = $paymentBadges[$order->payment_status] ?? ['secondary', 'Unknown'];
+                                @endphp
+                                <span class="badge bg-{{ $paymentConfig[0] }}">
+                                    {{ $paymentConfig[1] }}
                                 </span>
                             </div>
                         </div>
@@ -370,7 +367,33 @@
         }
 
         .badge {
-            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Badge yang lebih besar untuk halaman detail */
+        .badge.p-2 {}
+
+        /* Warna badge yang konsisten */
+        .badge.bg-warning {
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+
+        .badge.bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        .badge.bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .badge.bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .badge.bg-danger {
+            background-color: #dc3545 !important;
         }
 
         .card-header h5 {

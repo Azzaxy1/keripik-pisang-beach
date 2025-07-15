@@ -32,10 +32,10 @@ class CheckoutController extends Controller
 
         $cartItems = $cart->items()->with('product')->get();
 
-        // Hitung total untuk keripik pisang
-        $subtotal = $cartItems->sum(fn($item) => $item->product->price * $item->quantity);
+        // Hitung total untuk keripik pisang menggunakan current price (sale price jika ada)
+        $subtotal = $cartItems->sum(fn($item) => $item->product->current_price * $item->quantity);
         $tax = 0; // Tidak ada pajak untuk keripik pisang
-        $shipping = $subtotal >= 100000 ? 0 : 15000; // Gratis ongkir untuk pembelian di atas 100rb
+        $shipping = $subtotal >= 100000 ? 0 : 5000; // Gratis ongkir untuk pembelian di atas 100rb
         $total = $subtotal + $tax + $shipping;
 
         // Info rekening BCA
@@ -78,11 +78,11 @@ class CheckoutController extends Controller
                 $paymentProofPath = $request->file('payment_proof')->store('payment-proofs', 'public');
             }
 
-            // Hitung totals
+            // Hitung totals menggunakan current price (sale price jika ada)
             $cartItems = $cart->items()->with('product')->get();
-            $subtotal = $cartItems->sum(fn($item) => $item->product->price * $item->quantity);
+            $subtotal = $cartItems->sum(fn($item) => $item->product->current_price * $item->quantity);
             $taxAmount = 0; // Tidak ada pajak
-            $shippingAmount = $subtotal >= 100000 ? 0 : 15000; // Gratis ongkir di atas 100rb
+            $shippingAmount = $subtotal >= 100000 ? 0 : 5000; // Gratis ongkir di atas 100rb
             $totalAmount = $subtotal + $taxAmount + $shippingAmount;
 
             // Generate order number
@@ -143,11 +143,11 @@ class CheckoutController extends Controller
 
             // Kosongkan keranjang setelah order berhasil
             $cart->items()->delete();
+            $cart->updateTotals();
 
             DB::commit();
 
             return redirect()->route('orders.show', $order->id)->with('success', 'Pesanan berhasil dibuat dengan nomor: ' . $orderNumber . '. Menunggu konfirmasi pembayaran.');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage())->withInput();

@@ -9,12 +9,11 @@
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <h1>
-                        Selamat Datang di Toko Kami
+                        Temukan Keripik Pisang Terbaik di Sini
                     </h1>
-                    <p class="lead mb-4">Temukan produk keripik pisang menakjubkan dengan harga yang tak tertandingi. Belanja
-                        dari ribuan
-                        produk dengan pengiriman cepat dan pengembalian yang mudah.</p>
-                    <a href="{{ route('shop') }}" class="btn btn-light btn-lg">Beli Sekarang</a>
+                    <p class="lead mb-4">Nikmati berbagai pilihan keripik pisang lezat dengan harga terjangkau. Belanja
+                        mudah, pengiriman cepat, dan kualitas terjamin hanya di toko kami.</p>
+                    <a href="{{ route('shop') }}" class="btn btn-light btn-lg">Belanja Sekarang</a>
                 </div>
                 <div class="col-lg-6">
                     <img src="/images/hero.png" alt="Hero Image" class="img-fluid rounded shadow">
@@ -23,7 +22,7 @@
         </div>
     </section>
 
-    <!-- Categories Section -->
+    {{-- <!-- Categories Section -->
     @if ($topCategories->count() > 0)
         <section class="categories-section py-5">
             <div class="container">
@@ -52,16 +51,15 @@
                 </div>
             </div>
         </section>
-    @endif
-
+    @endif --}}
     <!-- Featured Products -->
     @if ($featuredProducts->count() > 0)
         <section class="featured-products py-5 bg-light">
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center mb-5">
-                        <h2 class="fw-bold">Featured Products</h2>
-                        <p class="text-muted">Handpicked products just for you</p>
+                        <h2 class="fw-bold">Produk Unggulan</h2>
+                        <p class="text-muted">Pilihan produk terbaik khusus untuk Anda</p>
                     </div>
                 </div>
                 <div class="row">
@@ -80,17 +78,17 @@
                                     <div class="mt-auto">
                                         <div class="price-section mb-3">
                                             @if ($product->sale_price && $product->sale_price < $product->price)
-                                                <span
-                                                    class="price-sale h6">Rp {{ number_format((float)$product->sale_price, 0, ",", ".") }}</span>
-                                                <span
-                                                    class="price-original small ms-2">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
+                                                <span class="price-sale h6">Rp
+                                                    {{ number_format((float) $product->sale_price, 0, ',', '.') }}</span>
+                                                <span class="price-original small ms-2">Rp
+                                                    {{ number_format((float) $product->price, 0, ',', '.') }}</span>
                                             @else
-                                                <span class="h6">Rp {{ number_format((float)$product->price, 0, ",", ".") }}</span>
+                                                <span class="h6">Rp
+                                                    {{ number_format((float) $product->price, 0, ',', '.') }}</span>
                                             @endif
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <button class="btn btn-cart flex-fill"
-                                                onclick="addToCart({{ $product->id }})">
+                                            <button class="btn btn-cart flex-fill" onclick="addToCart({{ $product->id }})">
                                                 <i class="fas fa-cart-plus"></i> Add to Cart
                                             </button>
                                             <a href="{{ route('product.detail', $product->slug) }}"
@@ -110,6 +108,8 @@
             </div>
         </section>
     @endif
+
+    {{-- 
 
     <!-- Best Selling Products -->
     @if ($bestSellingProducts->count() > 0)
@@ -217,8 +217,8 @@
                 </div>
             </div>
         </section>
-    @endif
-
+    @endif --}}
+    {{-- 
     <!-- Features Section -->
     <section class="features-section py-5">
         <div class="container">
@@ -261,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
 
 @push('styles')

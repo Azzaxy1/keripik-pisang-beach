@@ -6,12 +6,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                {{-- <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>User Management</h2>
                     <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Add New User
                     </a>
-                </div>
+                </div> --}}
 
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -113,12 +113,12 @@
                                             <td>
                                                 <div>
                                                     <strong>{{ $user->name }}</strong>
-                                                    @if ($user->email_verified_at)
+                                                    {{-- @if ($user->email_verified_at)
                                                         <i class="fas fa-check-circle text-success" title="Verified"></i>
                                                     @else
                                                         <i class="fas fa-exclamation-circle text-warning"
                                                             title="Unverified"></i>
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
                                             </td>
                                             <td>{{ $user->email }}</td>
