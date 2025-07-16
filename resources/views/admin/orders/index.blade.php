@@ -166,11 +166,11 @@
                                                                 <i class="fas fa-ellipsis-v"></i>
                                                             </button>
                                                             <ul class="dropdown-menu">
-                                                                <li><a class="dropdown-item"
+                                                                {{-- <li><a class="dropdown-item"
                                                                         href="{{ route('admin.orders.print', $order) }}"
                                                                         target="_blank">
                                                                         <i class="fas fa-print me-2"></i>Cetak
-                                                                    </a></li>
+                                                                    </a></li> --}}
                                                                 <li><a class="dropdown-item"
                                                                         href="{{ route('admin.orders.invoice', $order) }}"
                                                                         target="_blank">

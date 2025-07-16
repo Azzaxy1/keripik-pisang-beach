@@ -16,9 +16,9 @@
                         <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>
-                        <a href="{{ route('admin.orders.print', $order) }}" target="_blank" class="btn btn-outline-primary">
+                        {{-- <a href="{{ route('admin.orders.print', $order) }}" target="_blank" class="btn btn-outline-primary">
                             <i class="fas fa-print"></i> Cetak
-                        </a>
+                        </a> --}}
                         <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank"
                             class="btn btn-outline-success">
                             <i class="fas fa-file-invoice"></i> Invoice
@@ -236,16 +236,20 @@
                                         <div class="mb-3">
                                             <label class="form-label">Status Pesanan</label>
                                             <select name="status" class="form-select" onchange="this.form.submit()">
-                                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
+                                                <option value="pending"
+                                                    {{ $order->status == 'pending' ? 'selected' : '' }}>
                                                     Menunggu</option>
                                                 <option value="processing"
-                                                    {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses</option>
-                                                <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
+                                                    {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses
+                                                </option>
+                                                <option value="shipped"
+                                                    {{ $order->status == 'shipped' ? 'selected' : '' }}>
                                                     Dikirim</option>
                                                 <option value="delivered"
                                                     {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima</option>
                                                 <option value="cancelled"
-                                                    {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                                    {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan
+                                                </option>
                                             </select>
                                         </div>
                                     </form>
@@ -267,7 +271,8 @@
                                     </span>
                                     @if (Auth::user()->hasRole('owner'))
                                         <small class="text-muted d-block mt-2">
-                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status pesanan
+                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status
+                                            pesanan
                                         </small>
                                     @endif
                                 </div>
@@ -287,16 +292,19 @@
                                         @method('PATCH')
                                         <div class="mb-3">
                                             <label class="form-label">Status Pembayaran</label>
-                                            <select name="payment_status" class="form-select" onchange="this.form.submit()">
+                                            <select name="payment_status" class="form-select"
+                                                onchange="this.form.submit()">
                                                 <option value="pending"
                                                     {{ $order->payment_status == 'pending' ? 'selected' : '' }}>Menunggu
                                                 </option>
                                                 <option value="paid"
                                                     {{ $order->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
                                                 <option value="failed"
-                                                    {{ $order->payment_status == 'failed' ? 'selected' : '' }}>Gagal</option>
+                                                    {{ $order->payment_status == 'failed' ? 'selected' : '' }}>Gagal
+                                                </option>
                                                 <option value="refunded"
-                                                    {{ $order->payment_status == 'refunded' ? 'selected' : '' }}>Dikembalikan
+                                                    {{ $order->payment_status == 'refunded' ? 'selected' : '' }}>
+                                                    Dikembalikan
                                                 </option>
                                             </select>
                                         </div>
@@ -317,7 +325,8 @@
                                 </span>
                                 @if (Auth::user()->hasRole('owner'))
                                     <small class="text-muted d-block mt-2">
-                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status pembayaran
+                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status
+                                        pembayaran
                                     </small>
                                 @endif
                             </div>
@@ -349,7 +358,8 @@
                                     </form>
                                 @else
                                     <small class="text-muted">
-                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat menambah/mengubah catatan pesanan
+                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat menambah/mengubah catatan
+                                        pesanan
                                     </small>
                                 @endif
                             </div>
@@ -375,7 +385,8 @@
                                         @endif
                                     @else
                                         <small class="text-muted">
-                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat melakukan aksi pada pesanan
+                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat melakukan aksi pada
+                                            pesanan
                                         </small>
                                     @endif
                                 </div>
