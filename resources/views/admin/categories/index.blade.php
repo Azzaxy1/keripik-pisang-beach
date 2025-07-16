@@ -23,61 +23,83 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped" id="categories-table">
-                                <thead>
+                            <table class="table table-striped table-hover" id="categories-table">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Gambar</th>
-                                        <th>Nama</th>
-                                        <th>Slug</th>
-                                        <th>Jumlah Produk</th>
-                                        <th>Status</th>
-                                        <th>Dibuat</th>
-                                        <th>Aksi</th>
+                                        <th width="8%">ID</th>
+                                        <th width="15%">Gambar</th>
+                                        <th width="25%">Nama Kategori</th>
+                                        <th width="15%">Jumlah Produk</th>
+                                        <th width="12%">Status</th>
+                                        <th width="15%">Dibuat</th>
+                                        <th width="10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($categories as $category)
                                         <tr>
-                                            <td>{{ $category->id }}</td>
-                                            <td>
+                                            <td class="align-middle">
+                                                <span class="badge bg-light text-dark">{{ $category->id }}</span>
+                                            </td>
+                                            <td class="align-middle">
                                                 @if ($category->image)
                                                     <img src="{{ $category->image_url }}" alt="{{ $category->name }}"
-                                                        style="width: 50px; height: 50px; object-fit: cover;"
-                                                        class="rounded">
+                                                        style="width: 60px; height: 60px; object-fit: cover;"
+                                                        class="rounded shadow-sm">
                                                 @else
                                                     <div class="bg-light d-flex align-items-center justify-content-center rounded"
-                                                        style="width: 50px; height: 50px;">
+                                                        style="width: 60px; height: 60px;">
                                                         <i class="fas fa-image text-muted"></i>
                                                     </div>
                                                 @endif
                                             </td>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ $category->slug }}</td>
-                                            <td>{{ $category->products_count ?? 0 }}</td>
-                                            <td>
+                                            <td class="align-middle">
+                                                <div>
+                                                    <strong>{{ $category->name }}</strong>
+                                                    @if ($category->description)
+                                                        <br><small
+                                                            class="text-muted">{{ Str::limit($category->description, 60) }}</small>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center">
                                                 <span
-                                                    class="badge bg-{{ $category->status == 'active' ? 'success' : 'danger' }}">
+                                                    class="badge bg-primary fs-6">{{ $category->products_count ?? 0 }}</span>
+                                                @if ($category->products_count > 0)
+                                                    <br><small class="text-muted">produk terdaftar</small>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle">
+                                                <span
+                                                    class="badge bg-{{ $category->status == 'active' ? 'success' : 'danger' }} fs-6">
                                                     {{ $category->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}
                                                 </span>
                                             </td>
-                                            <td>{{ $category->created_at->format('M d, Y') }}</td>
-                                            <td>
+                                            <td class="align-middle">
+                                                <div>
+                                                    {{ $category->created_at->format('d M Y') }}
+                                                    <br><small
+                                                        class="text-muted">{{ $category->created_at->diffForHumans() }}</small>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">
                                                 <div class="btn-group" role="group">
                                                     <a href="{{ route('admin.categories.show', $category) }}"
-                                                        class="btn btn-sm btn-info">
+                                                        class="btn btn-sm btn-outline-info" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                     <a href="{{ route('admin.categories.edit', $category) }}"
-                                                        class="btn btn-sm btn-warning">
+                                                        class="btn btn-sm btn-outline-warning" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <form action="{{ route('admin.categories.destroy', $category) }}"
                                                         method="POST" style="display: inline;"
-                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
+                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori \'{{ $category->name }}\'?\n\nKategori yang memiliki produk tidak dapat dihapus.')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            title="Hapus"
+                                                            {{ $category->products_count > 0 ? 'disabled' : '' }}>
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>

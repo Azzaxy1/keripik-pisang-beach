@@ -33,7 +33,7 @@
                                     placeholder="Search products...">
                             </div>
 
-                            <!-- Categories -->
+                            {{-- <!-- Categories -->
                             @if ($categories->count() > 0)
                                 <div class="mb-3">
                                     <label class="form-label">Categories</label>
@@ -47,7 +47,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            @endif
+                            @endif --}}
                             {{-- 
                         <!-- Brands -->
                         @if ($brands->count() > 0)
