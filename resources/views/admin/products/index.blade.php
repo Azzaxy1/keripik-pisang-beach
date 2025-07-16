@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Products Management')
+@section('title', 'Manajemen Produk')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Products Management</h2>
+                    <h2>Manajemen Produk Keripik Pisang</h2>
                     @if (Auth::user()->hasRole('admin'))
                         <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add New Product
+                            <i class="fas fa-plus"></i> Tambah Produk Baru
                         </a>
                     @endif
                 </div>
@@ -25,63 +25,82 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped" id="products-table">
-                                <thead>
+                            <table class="table table-striped table-hover" id="products-table">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Image</th>
-                                        <th>Name</th>
-                                        <th>Category</th>
-                                        {{-- <th>Brand</th> --}}
-                                        <th>Price</th>
-                                        <th>Sale Price</th>
-                                        <th>Stock</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th width="8%">ID</th>
+                                        <th width="12%">Foto</th>
+                                        <th width="25%">Nama Produk</th>
+                                        <th width="15%">Kategori</th>
+                                        <th width="12%">Harga</th>
+                                        <th width="12%">Harga Promo</th>
+                                        <th width="8%">Stok</th>
+                                        <th width="8%">Status</th>
+                                        <th width="10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->id }}</td>
-                                            <td>
-                                                <img src="{{ $product->featured_image }}" alt="{{ $product->name }}"
-                                                    style="width: 50px; height: 50px; object-fit: cover;" class="rounded">
+                                            <td class="align-middle">
+                                                <span class="badge bg-light text-dark">{{ $product->id }}</span>
                                             </td>
-                                            <td>{{ Str::limit($product->name, 30) }}</td>
-                                            <td>{{ $product->category->name ?? 'N/A' }}</td>
-                                            {{-- <td>{{ $product->brand->name ?? 'N/A' }}</td> --}}
-                                            <td>Rp {{ number_format((float) $product->price, 0, ',', '.') }}</td>
-                                            <td>
+                                            <td class="align-middle">
+                                                <img src="{{ $product->featured_image }}" alt="{{ $product->name }}"
+                                                    style="width: 60px; height: 60px; object-fit: cover;"
+                                                    class="rounded shadow-sm">
+                                            </td>
+                                            <td class="align-middle">
+                                                <div>
+                                                    <strong>{{ Str::limit($product->name, 30) }}</strong>
+                                                    @if ($product->featured)
+                                                        <br><span class="badge bg-warning text-dark">Unggulan</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">{{ $product->category->name ?? 'Belum ada kategori' }}
+                                            </td>
+                                            <td class="align-middle">
+                                                <span class="fw-bold">Rp
+                                                    {{ number_format((float) $product->price, 0, ',', '.') }}</span>
+                                            </td>
+                                            <td class="align-middle">
                                                 @if ($product->sale_price)
-                                                    Rp {{ number_format((float) $product->sale_price, 0, ',', '.') }}
+                                                    <span class="text-success fw-bold">Rp
+                                                        {{ number_format((float) $product->sale_price, 0, ',', '.') }}</span>
                                                 @else
-                                                    -
+                                                    <span class="text-muted">-</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $product->stock_quantity }}</td>
-                                            <td>
+                                            <td class="align-middle text-center">
                                                 <span
-                                                    class="badge bg-{{ $product->status == 'active' ? 'success' : 'danger' }}">
-                                                    {{ ucfirst($product->status) }}
+                                                    class="badge bg-{{ $product->stock_quantity > 0 ? 'success' : 'danger' }} fs-6">
+                                                    {{ $product->stock_quantity }}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td class="align-middle">
+                                                <span
+                                                    class="badge bg-{{ $product->status == 'active' ? 'success' : 'danger' }} fs-6">
+                                                    {{ $product->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle">
                                                 <div class="btn-group" role="group">
                                                     <a href="{{ route('admin.products.show', $product) }}"
-                                                        class="btn btn-sm btn-info">
+                                                        class="btn btn-sm btn-outline-info" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                     <a href="{{ route('admin.products.edit', $product) }}"
-                                                        class="btn btn-sm btn-warning">
+                                                        class="btn btn-sm btn-outline-warning" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <form action="{{ route('admin.products.destroy', $product) }}"
                                                         method="POST" style="display: inline;"
-                                                        onsubmit="return confirm('Are you sure?')">
+                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk \'{{ $product->name }}\'?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            title="Hapus">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>

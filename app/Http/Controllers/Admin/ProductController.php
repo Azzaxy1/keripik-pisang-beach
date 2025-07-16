@@ -35,14 +35,10 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'short_description' => 'nullable|string|max:500',
-            'sku' => 'nullable|string|unique:products,sku',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lt:price',
             'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
             'stock_quantity' => 'required|integer|min:0',
-            'stock_status' => 'required|in:in_stock,out_of_stock,on_backorder',
             'weight' => 'nullable|numeric|min:0',
             'status' => 'nullable|in:active,inactive',
             'featured' => 'nullable|boolean',
@@ -54,6 +50,10 @@ class ProductController extends Controller
         $data['slug'] = Str::slug($request->name);
         $data['status'] = $request->status === 'active' ? true : false;
         $data['featured'] = $request->has('featured');
+
+        // Set default values for simplified form
+        $data['stock_status'] = $request->stock_quantity > 0 ? 'in_stock' : 'out_of_stock';
+        $data['manage_stock'] = true;
 
         // Generate SKU automatically if not provided
         $data['sku'] = $request->sku ?: $this->generateSKU($request->name);
@@ -94,22 +94,14 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'short_description' => 'nullable|string|max:500',
-            'sku' => 'required|string|unique:products,sku,' . $product->id,
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lt:price',
             'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'nullable|exists:brands,id',
             'stock_quantity' => 'required|integer|min:0',
-            'manage_stock' => 'boolean',
-            'stock_status' => 'required|in:in_stock,out_of_stock,on_backorder',
             'weight' => 'nullable|numeric|min:0',
             'status' => 'nullable|in:active,inactive',
             'featured' => 'nullable|boolean',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -117,6 +109,15 @@ class ProductController extends Controller
         $data['slug'] = Str::slug($request->name);
         $data['status'] = $request->status === 'active' ? true : false;
         $data['featured'] = $request->has('featured');
+
+        // Set default values for simplified form
+        $data['stock_status'] = $request->stock_quantity > 0 ? 'in_stock' : 'out_of_stock';
+        $data['manage_stock'] = true;
+
+        // Generate SKU automatically if not provided
+        if (!$request->sku) {
+            $data['sku'] = $this->generateSKU($request->name);
+        }
 
         // Handle featured image upload
         if ($request->hasFile('featured_image')) {
