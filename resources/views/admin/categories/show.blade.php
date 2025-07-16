@@ -1,19 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Category Details - ' . $category->name)
+@section('title', 'Detail Kategori - ' . $category->name)
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Category Details</h2>
+                    <h2>Detail Kategori</h2>
                     <div>
                         <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
-                            <i class="fas fa-edit"></i> Edit Category
+                            <i class="fas fa-edit"></i> Edit Kategori
                         </a>
                         <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Categories
+                            <i class="fas fa-arrow-left"></i> Kembali ke Kategori
                         </a>
                     </div>
                 </div>
@@ -22,12 +22,12 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h5>Category Information</h5>
+                                <h5>Informasi Kategori</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <strong>Name:</strong>
+                                        <strong>Nama:</strong>
                                         <p>{{ $category->name }}</p>
                                     </div>
                                     <div class="col-md-6">
@@ -39,7 +39,7 @@
                                 @if ($category->description)
                                     <div class="row">
                                         <div class="col-12">
-                                            <strong>Description:</strong>
+                                            <strong>Deskripsi:</strong>
                                             <p>{{ $category->description }}</p>
                                         </div>
                                     </div>
@@ -49,13 +49,13 @@
                                     <div class="row">
                                         @if ($category->meta_title)
                                             <div class="col-md-6">
-                                                <strong>Meta Title:</strong>
+                                                <strong>Judul Meta:</strong>
                                                 <p>{{ $category->meta_title }}</p>
                                             </div>
                                         @endif
                                         @if ($category->meta_description)
                                             <div class="col-md-6">
-                                                <strong>Meta Description:</strong>
+                                                <strong>Deskripsi Meta:</strong>
                                                 <p>{{ $category->meta_description }}</p>
                                             </div>
                                         @endif
@@ -68,24 +68,24 @@
                                         <p>
                                             <span
                                                 class="badge bg-{{ $category->status == 'active' ? 'success' : 'danger' }}">
-                                                {{ ucfirst($category->status) }}
+                                                {{ $category->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}
                                             </span>
                                         </p>
                                     </div>
                                     <div class="col-md-6">
-                                        <strong>Products Count:</strong>
-                                        <p>{{ $category->products_count ?? 0 }} products</p>
+                                        <strong>Jumlah Produk:</strong>
+                                        <p>{{ $category->products_count ?? 0 }} produk</p>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <strong>Created:</strong>
-                                        <p>{{ $category->created_at->format('M d, Y H:i') }}</p>
+                                        <strong>Dibuat:</strong>
+                                        <p>{{ $category->created_at->format('d M Y H:i') }}</p>
                                     </div>
                                     <div class="col-md-6">
-                                        <strong>Last Updated:</strong>
-                                        <p>{{ $category->updated_at->format('M d, Y H:i') }}</p>
+                                        <strong>Terakhir Diperbarui:</strong>
+                                        <p>{{ $category->updated_at->format('d M Y H:i') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -94,19 +94,19 @@
                         @if ($category->products && $category->products->count() > 0)
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    <h5>Products in this Category</h5>
+                                    <h5>Produk dalam Kategori Ini</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Image</th>
-                                                    <th>Name</th>
-                                                    <th>Price</th>
-                                                    <th>Stock</th>
+                                                    <th>Gambar</th>
+                                                    <th>Nama</th>
+                                                    <th>Harga</th>
+                                                    <th>Stok</th>
                                                     <th>Status</th>
-                                                    <th>Actions</th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -125,7 +125,7 @@
                                                         <td>
                                                             <span
                                                                 class="badge bg-{{ $product->status == 'active' ? 'success' : 'danger' }}">
-                                                                {{ ucfirst($product->status) }}
+                                                                {{ $product->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}
                                                             </span>
                                                         </td>
                                                         <td>
@@ -143,7 +143,7 @@
                                         <div class="text-center">
                                             <a href="{{ route('admin.products.index', ['category' => $category->id]) }}"
                                                 class="btn" style="background-color: #f3b841; color: white;">
-                                                View All Products
+                                                Lihat Semua Produk
                                             </a>
                                         </div>
                                     @endif
@@ -155,7 +155,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5>Category Image</h5>
+                                <h5>Gambar Kategori</h5>
                             </div>
                             <div class="card-body text-center">
                                 @if ($category->image)
@@ -165,7 +165,7 @@
                                 @else
                                     <div class="text-muted">
                                         <i class="fas fa-image fa-3x mb-3"></i>
-                                        <p>No image uploaded</p>
+                                        <p>Belum ada gambar diupload</p>
                                     </div>
                                 @endif
                             </div>
@@ -173,21 +173,21 @@
 
                         <div class="card mt-4">
                             <div class="card-header">
-                                <h5>Quick Stats</h5>
+                                <h5>Statistik Singkat</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row text-center">
                                     <div class="col-6">
                                         <div class="stat-item">
                                             <h4 class="text-primary">{{ $category->products_count ?? 0 }}</h4>
-                                            <small class="text-muted">Products</small>
+                                            <small class="text-muted">Produk</small>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="stat-item">
                                             <h4 class="text-success">
                                                 {{ $category->products->where('status', 'active')->count() }}</h4>
-                                            <small class="text-muted">Active</small>
+                                            <small class="text-muted">Aktif</small>
                                         </div>
                                     </div>
                                 </div>
@@ -196,20 +196,20 @@
 
                         <div class="card mt-4">
                             <div class="card-header">
-                                <h5>Actions</h5>
+                                <h5>Aksi</h5>
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
                                     <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
-                                        <i class="fas fa-edit"></i> Edit Category
+                                        <i class="fas fa-edit"></i> Edit Kategori
                                     </a>
                                     <a href="{{ route('admin.products.create', ['category' => $category->id]) }}"
                                         class="btn btn-success">
-                                        <i class="fas fa-plus"></i> Add Product
+                                        <i class="fas fa-plus"></i> Tambah Produk
                                     </a>
                                     <a href="{{ route('category.products', $category->slug) }}" class="btn btn-info"
                                         target="_blank">
-                                        <i class="fas fa-external-link-alt"></i> View on Store
+                                        <i class="fas fa-external-link-alt"></i> Lihat di Toko
                                     </a>
                                 </div>
                             </div>
