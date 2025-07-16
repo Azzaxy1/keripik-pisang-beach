@@ -135,6 +135,43 @@
 
         <!-- Content Row -->
         <div class="row">
+            <!-- Low Stock Alert -->
+            @if($lowStockProducts->count() > 0)
+            <div class="col-12 mb-4">
+                <div class="card border-start border-warning border-4 shadow">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 font-weight-bold text-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Peringatan Stok Produk
+                        </h6>
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-warning">Kelola Stok</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach($lowStockProducts as $product)
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ $product->featured_image }}" 
+                                         alt="{{ $product->name }}" 
+                                         class="rounded me-3" 
+                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ Str::limit($product->name, 30) }}</h6>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-{{ $product->stock_status === 'out_of_stock' ? 'danger' : 'warning' }} me-2">
+                                                {{ $product->stock_status === 'out_of_stock' ? 'Habis' : 'Stok Sedikit' }}
+                                            </span>
+                                            <small class="text-muted">Sisa: {{ $product->stock_quantity }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            
             <!-- Recent Orders -->
             <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">

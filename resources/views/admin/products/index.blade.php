@@ -30,11 +30,12 @@
                                     <tr>
                                         <th width="8%">ID</th>
                                         <th width="12%">Foto</th>
-                                        <th width="25%">Nama Produk</th>
-                                        <th width="15%">Kategori</th>
-                                        <th width="12%">Harga</th>
-                                        <th width="12%">Harga Promo</th>
+                                        <th width="20%">Nama Produk</th>
+                                        <th width="12%">Kategori</th>
+                                        <th width="10%">Harga</th>
+                                        <th width="10%">Harga Promo</th>
                                         <th width="8%">Stok</th>
+                                        <th width="10%">Status Stok</th>
                                         <th width="8%">Status</th>
                                         <th width="10%">Aksi</th>
                                     </tr>
@@ -76,6 +77,25 @@
                                                 <span
                                                     class="badge bg-{{ $product->stock_quantity > 0 ? 'success' : 'danger' }} fs-6">
                                                     {{ $product->stock_quantity }}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @php
+                                                    $stockStatusClass = match($product->stock_status) {
+                                                        'in_stock' => 'success',
+                                                        'low_stock' => 'warning',
+                                                        'out_of_stock' => 'danger',
+                                                        default => 'secondary'
+                                                    };
+                                                    $stockStatusText = match($product->stock_status) {
+                                                        'in_stock' => 'Tersedia',
+                                                        'low_stock' => 'Stok Sedikit',
+                                                        'out_of_stock' => 'Habis',
+                                                        default => 'Unknown'
+                                                    };
+                                                @endphp
+                                                <span class="badge bg-{{ $stockStatusClass }} fs-6">
+                                                    {{ $stockStatusText }}
                                                 </span>
                                             </td>
                                             <td class="align-middle">

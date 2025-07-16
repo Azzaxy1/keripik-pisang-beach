@@ -38,7 +38,7 @@ class RoleAndPermissionSeeder extends Seeder
         if (!$adminRole->hasPermissionTo('manage users')) {
             $adminRole->givePermissionTo(['manage users', 'manage products', 'manage categories', 'manage orders', 'manage payments', 'view dashboard']);
         }
-        
+
         if (!$ownerRole->hasAnyPermission(Permission::all())) {
             $ownerRole->givePermissionTo(Permission::all()); // Owner has all permissions
         }
@@ -77,17 +77,6 @@ class RoleAndPermissionSeeder extends Seeder
                 'is_active' => true
             ]);
             $customer1->assignRole('customer');
-        }
-
-        if (!User::where('email', 'budi@example.com')->exists()) {
-            $customer2 = User::create([
-                'name' => 'Budi Santoso',
-                'email' => 'budi@example.com',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'is_active' => true
-            ]);
-            $customer2->assignRole('customer');
         }
     }
 }

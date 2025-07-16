@@ -113,4 +113,33 @@ class Order extends Model
         $this->order_number = 'ORD-' . date('Y') . '-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
         $this->save();
     }
+
+    /**
+     * Kembalikan stok produk ketika order dibatalkan
+     */
+    public function restoreStock()
+    {
+        foreach ($this->items as $item) {
+            $product = $item->product;
+            if ($product) {
+                $product->incrementStock($item->quantity);
+            }
+        }
+    }
+
+    /**
+     * Override update method untuk handle perubahan status
+     */
+    public function update(array $attributes = [], array $options = [])
+    {
+        $oldStatus = $this->status;
+        $result = parent::update($attributes, $options);
+        
+        // Jika status berubah menjadi cancelled, kembalikan stok
+        if (isset($attributes['status']) && $attributes['status'] === self::STATUS_CANCELLED && $oldStatus !== self::STATUS_CANCELLED) {
+            $this->restoreStock();
+        }
+        
+        return $result;
+    }
 }

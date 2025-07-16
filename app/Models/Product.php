@@ -103,6 +103,45 @@ class Product extends Model
         return $query->where('stock_status', 'in_stock');
     }
 
+    // Stock management methods
+    public function updateStockStatus()
+    {
+        $newStatus = 'in_stock';
+        
+        if (!$this->manage_stock) {
+            $newStatus = 'in_stock';
+        } elseif ($this->stock_quantity <= 0) {
+            $newStatus = 'out_of_stock';
+        } elseif ($this->stock_quantity <= 5) { // Low stock threshold
+            $newStatus = 'low_stock';
+        }
+        
+        // Hanya update jika status berubah
+        if ($this->stock_status !== $newStatus) {
+            $this->updateQuietly(['stock_status' => $newStatus]);
+        }
+    }
+
+    public function decrementStock($quantity)
+    {
+        if ($this->manage_stock && $this->stock_quantity >= $quantity) {
+            $this->decrement('stock_quantity', $quantity);
+            $this->updateStockStatus();
+            return true;
+        }
+        return false;
+    }
+
+    public function incrementStock($quantity)
+    {
+        if ($this->manage_stock) {
+            $this->increment('stock_quantity', $quantity);
+            $this->updateStockStatus();
+            return true;
+        }
+        return false;
+    }
+
     // Accessors
     public function getCurrentPriceAttribute()
     {

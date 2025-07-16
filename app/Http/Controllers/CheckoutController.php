@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -53,20 +54,37 @@ class CheckoutController extends Controller
      */
     public function process(Request $request)
     {
-        $request->validate([
-            'payment_method' => 'required|in:bank_transfer',
-            'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|string|max:20',
-            'customer_address' => 'required|string|max:500',
-            'order_notes' => 'nullable|string|max:1000',
-        ]);
+        Log::info('Checkout process started', ['user_id' => Auth::id()]);
+        
+        try {
+            $request->validate([
+                'payment_method' => 'required|in:bank_transfer',
+                'payment_proof' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'customer_name' => 'required|string|max:255',
+                'customer_phone' => 'required|string|max:20',
+                'customer_address' => 'required|string|max:500',
+                'order_notes' => 'nullable|string|max:1000',
+            ]);
+            
+            Log::info('Validation passed');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            throw $e;
+        }
 
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja kamu kosong.');
+        }
+
+        // Validasi stok sebelum proses checkout
+        $cartItems = $cart->items()->with('product')->get();
+        foreach ($cartItems as $cartItem) {
+            if ($cartItem->product->stock_quantity < $cartItem->quantity) {
+                return redirect()->route('cart.index')->with('error', "Stok {$cartItem->product->name} tidak mencukupi. Stok tersedia: {$cartItem->product->stock_quantity}, diminta: {$cartItem->quantity}");
+            }
         }
 
         DB::beginTransaction();
@@ -130,14 +148,37 @@ class CheckoutController extends Controller
                 'currency' => 'IDR'
             ]);
 
-            // Simpan order items
+            // Simpan order items dan kurangi stok produk
             foreach ($cartItems as $cartItem) {
+                $product = $cartItem->product;
+                
+                // Cek apakah stok mencukupi (double check)
+                if ($product->stock_quantity < $cartItem->quantity) {
+                    throw new \Exception("Stok {$product->name} tidak mencukupi. Stok tersedia: {$product->stock_quantity}, diminta: {$cartItem->quantity}");
+                }
+
+                // Buat order item dengan current price (sale price jika ada)
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
-                    'price' => $cartItem->product->price,
-                    'subtotal' => $cartItem->product->price * $cartItem->quantity
+                    'price' => $cartItem->product->current_price,
+                    'subtotal' => $cartItem->product->current_price * $cartItem->quantity
+                ]);
+
+                // Kurangi stok produk menggunakan method yang sudah dibuat
+                Log::info('Decrementing stock', [
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'current_stock' => $product->stock_quantity,
+                    'quantity_to_subtract' => $cartItem->quantity
+                ]);
+                
+                $decrementResult = $product->decrementStock($cartItem->quantity);
+                
+                Log::info('Stock decremented', [
+                    'result' => $decrementResult,
+                    'new_stock' => $product->fresh()->stock_quantity
                 ]);
             }
 

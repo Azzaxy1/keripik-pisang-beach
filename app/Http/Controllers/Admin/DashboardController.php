@@ -35,6 +35,11 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+        // Low stock products alert
+        $lowStockProducts = \App\Models\Product::where('stock_status', 'low_stock')
+            ->orWhere('stock_status', 'out_of_stock')
+            ->take(10)
+            ->get();
 
         return view('admin.dashboard', compact(
             'totalProducts',
@@ -43,7 +48,8 @@ class DashboardController extends Controller
             'totalRevenue',
             'recentOrders',
             'topProducts',
-            'monthlySales'
+            'monthlySales',
+            'lowStockProducts'
         ));
     }
 }

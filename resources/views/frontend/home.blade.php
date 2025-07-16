@@ -53,17 +53,17 @@
         </section>
     @endif --}}
     <!-- Featured Products -->
-    @if ($featuredProducts->count() > 0)
+    @if ($latestProducts->count() > 0)
         <section class="featured-products py-5 bg-light">
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center mb-5">
-                        <h2 class="fw-bold">Produk Unggulan</h2>
+                        <h2 class="fw-bold">Produk Terbaru</h2>
                         <p class="text-muted">Pilihan produk terbaik khusus untuk Anda</p>
                     </div>
                 </div>
                 <div class="row">
-                    @foreach ($featuredProducts as $product)
+                    @foreach ($latestProducts as $product)
                         <div class="col-lg-3 col-md-6 mb-4">
                             <div class="card product-card h-100">
                                 @if ($product->discount_percentage > 0)
