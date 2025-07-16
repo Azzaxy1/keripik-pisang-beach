@@ -103,21 +103,30 @@
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-2">
-                            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Tambah Produk Baru
-                            </a>
-                            <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
-                                <i class="fas fa-plus"></i> Tambah Kategori Baru
-                            </a>
-                            <a href="{{ route('admin.orders.index') }}" class="btn btn-info">
-                                <i class="fas fa-list"></i> Lihat Semua Pesanan
-                            </a>
-                            <a href="{{ route('admin.products.index') }}" class="btn btn-warning">
-                                <i class="fas fa-box"></i> Kelola Produk
-                            </a>
-                            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-users"></i> Manajemen Pengguna
-                            </a>
+                            @if (Auth::user()->hasRole('owner'))
+                                <a href="{{ route('admin.orders.index') }}" class="btn btn-info">
+                                    <i class="fas fa-list"></i> Lihat Semua Pesanan
+                                </a>
+                                <a href="{{ route('admin.products.index') }}" class="btn btn-warning">
+                                    <i class="fas fa-box"></i> Lihat Semua Produk
+                                </a>
+                            @elseif(Auth::user()->hasRole('admin'))
+                                <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Tambah Produk Baru
+                                </a>
+                                <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Tambah Kategori Baru
+                                </a>
+                                <a href="{{ route('admin.orders.index') }}" class="btn btn-info">
+                                    <i class="fas fa-list"></i> Lihat Semua Pesanan
+                                </a>
+                                <a href="{{ route('admin.products.index') }}" class="btn btn-warning">
+                                    <i class="fas fa-box"></i> Kelola Produk
+                                </a>
+                                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-users"></i> Manajemen Pengguna
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

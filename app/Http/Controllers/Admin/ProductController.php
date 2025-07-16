@@ -23,6 +23,12 @@ class ProductController extends Controller
 
     public function create()
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Anda tidak memiliki izin untuk menambah produk.');
+        }
+
         // Cek kategori yang statusnya true atau active
         $categories = Category::where('status', true)->get();
         $brands = Brand::where('status', true)->get();
@@ -32,6 +38,12 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Anda tidak memiliki izin untuk menambah produk.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -82,6 +94,12 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Anda tidak memiliki izin untuk mengubah produk.');
+        }
+
         $categories = Category::where('status', true)->get();
         $brands = Brand::where('status', true)->get();
         $product->load(['images', 'attributes']);
@@ -91,6 +109,12 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Anda tidak memiliki izin untuk mengubah produk.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -156,6 +180,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('admin.products.index')
+                ->with('error', 'Anda tidak memiliki izin untuk menghapus produk.');
+        }
+
         // Delete product images
         foreach ($product->images as $image) {
             $imagePath = storage_path('app/public/products/' . $image->image);

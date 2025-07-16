@@ -90,20 +90,22 @@
                                                         class="btn btn-sm btn-outline-info" title="Lihat Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('admin.products.edit', $product) }}"
-                                                        class="btn btn-sm btn-outline-warning" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.products.destroy', $product) }}"
-                                                        method="POST" style="display: inline;"
-                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk \'{{ $product->name }}\'?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                            title="Hapus">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </form>
+                                                    @if (Auth::user()->hasRole('admin'))
+                                                        <a href="{{ route('admin.products.edit', $product) }}"
+                                                            class="btn btn-sm btn-outline-warning" title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <form action="{{ route('admin.products.destroy', $product) }}"
+                                                            method="POST" style="display: inline;"
+                                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk \'{{ $product->name }}\'?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                                title="Hapus">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

@@ -55,6 +55,11 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, Order $order)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk mengubah status pesanan.');
+        }
+
         $request->validate([
             'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled'
         ]);
@@ -74,6 +79,11 @@ class OrderController extends Controller
 
     public function updatePaymentStatus(Request $request, Order $order)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk mengubah status pembayaran.');
+        }
+
         $request->validate([
             'payment_status' => 'required|in:pending,paid,failed,refunded'
         ]);
@@ -85,6 +95,11 @@ class OrderController extends Controller
 
     public function addNote(Request $request, Order $order)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menambah catatan pesanan.');
+        }
+
         $request->validate([
             'notes' => 'required|string|max:1000'
         ]);
@@ -108,6 +123,11 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menghapus pesanan.');
+        }
+
         // Only allow deletion of cancelled orders
         if ($order->status !== 'cancelled') {
             return back()->with('error', 'Hanya pesanan yang dibatalkan yang bisa dihapus.');

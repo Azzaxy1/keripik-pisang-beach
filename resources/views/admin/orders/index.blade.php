@@ -152,40 +152,62 @@
                                                         class="btn btn-sm btn-outline-primary" title="Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    @if ($order->payment_proof && $order->payment_status == 'pending')
-                                                        <button class="btn btn-sm btn-outline-success"
-                                                            onclick="approvePayment({{ $order->id }})"
-                                                            title="Terima Pembayaran">
-                                                            <i class="fas fa-check"></i>
-                                                        </button>
-                                                    @endif
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                            data-bs-toggle="dropdown" title="Lainnya">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.orders.print', $order) }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-print me-2"></i>Cetak
-                                                                </a></li>
-                                                            <li><a class="dropdown-item"
-                                                                    href="{{ route('admin.orders.invoice', $order) }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-file-invoice me-2"></i>Invoice
-                                                                </a></li>
-                                                            @if ($order->status == 'cancelled')
-                                                                <li>
-                                                                    <hr class="dropdown-divider">
-                                                                </li>
-                                                                <li><a class="dropdown-item text-danger" href="#"
-                                                                        onclick="deleteOrder({{ $order->id }})">
-                                                                        <i class="fas fa-trash me-2"></i>Hapus
+                                                    @if (Auth::user()->hasRole('admin'))
+                                                        @if ($order->payment_proof && $order->payment_status == 'pending')
+                                                            <button class="btn btn-sm btn-outline-success"
+                                                                onclick="approvePayment({{ $order->id }})"
+                                                                title="Terima Pembayaran">
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
+                                                        @endif
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                data-bs-toggle="dropdown" title="Lainnya">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('admin.orders.print', $order) }}"
+                                                                        target="_blank">
+                                                                        <i class="fas fa-print me-2"></i>Cetak
                                                                     </a></li>
-                                                            @endif
-                                                        </ul>
-                                                    </div>
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('admin.orders.invoice', $order) }}"
+                                                                        target="_blank">
+                                                                        <i class="fas fa-file-invoice me-2"></i>Invoice
+                                                                    </a></li>
+                                                                @if ($order->status == 'cancelled')
+                                                                    <li>
+                                                                        <hr class="dropdown-divider">
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger" href="#"
+                                                                            onclick="deleteOrder({{ $order->id }})">
+                                                                            <i class="fas fa-trash me-2"></i>Hapus
+                                                                        </a></li>
+                                                                @endif
+                                                            </ul>
+                                                        </div>
+                                                    @else
+                                                        {{-- Owner hanya bisa print dan invoice --}}
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                data-bs-toggle="dropdown" title="Cetak">
+                                                                <i class="fas fa-print"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('admin.orders.print', $order) }}"
+                                                                        target="_blank">
+                                                                        <i class="fas fa-print me-2"></i>Cetak
+                                                                    </a></li>
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('admin.orders.invoice', $order) }}"
+                                                                        target="_blank">
+                                                                        <i class="fas fa-file-invoice me-2"></i>Invoice
+                                                                    </a></li>
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

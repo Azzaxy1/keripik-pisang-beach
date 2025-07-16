@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        <div class="card mt-4">
+                        {{-- <div class="card mt-4">
                             <div class="card-header">
                                 <h5>Statistik Singkat</h5>
                             </div>
@@ -192,7 +192,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="card mt-4">
                             <div class="card-header">

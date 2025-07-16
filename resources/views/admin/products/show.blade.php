@@ -9,9 +9,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Detail Produk</h2>
                     <div>
-                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
-                            <i class="fas fa-edit"></i> Edit Produk
-                        </a>
+                        @if (Auth::user()->hasRole('admin'))
+                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Edit Produk
+                            </a>
+                        @endif
                         <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Produk
                         </a>
@@ -175,7 +177,7 @@
                             </div>
                         </div>
 
-                        <div class="card mt-4">
+                        {{-- <div class="card mt-4">
                             <div class="card-header">
                                 <h5>Statistik Singkat</h5>
                             </div>
@@ -197,7 +199,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="card mt-4">
                             <div class="card-header">
@@ -205,21 +207,25 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
-                                        <i class="fas fa-edit"></i> Edit Produk
-                                    </a>
+                                    @if (Auth::user()->hasRole('admin'))
+                                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
+                                            <i class="fas fa-edit"></i> Edit Produk
+                                        </a>
+                                    @endif
                                     <a href="{{ route('product.detail', $product->slug) }}" class="btn btn-info"
                                         target="_blank">
                                         <i class="fas fa-external-link-alt"></i> Lihat di Toko Online
                                     </a>
-                                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100">
-                                            <i class="fas fa-trash"></i> Hapus Produk
-                                        </button>
-                                    </form>
+                                    @if (Auth::user()->hasRole('admin'))
+                                        <form action="{{ route('admin.products.destroy', $product) }}" method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger w-100">
+                                                <i class="fas fa-trash"></i> Hapus Produk
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>

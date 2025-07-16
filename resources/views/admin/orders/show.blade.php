@@ -228,26 +228,28 @@
                                 <h5 class="mb-0">Status Pesanan</h5>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST"
-                                    class="mb-3">
-                                    @csrf
-                                    @method('PATCH')
-                                    <div class="mb-3">
-                                        <label class="form-label">Status Pesanan</label>
-                                        <select name="status" class="form-select" onchange="this.form.submit()">
-                                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
-                                                Menunggu</option>
-                                            <option value="processing"
-                                                {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses</option>
-                                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
-                                                Dikirim</option>
-                                            <option value="delivered"
-                                                {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima</option>
-                                            <option value="cancelled"
-                                                {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
-                                        </select>
-                                    </div>
-                                </form>
+                                @if (Auth::user()->hasRole('admin'))
+                                    <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST"
+                                        class="mb-3">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="mb-3">
+                                            <label class="form-label">Status Pesanan</label>
+                                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
+                                                    Menunggu</option>
+                                                <option value="processing"
+                                                    {{ $order->status == 'processing' ? 'selected' : '' }}>Diproses</option>
+                                                <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
+                                                    Dikirim</option>
+                                                <option value="delivered"
+                                                    {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima</option>
+                                                <option value="cancelled"
+                                                    {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                @endif
 
                                 <div class="mb-3">
                                     @php
@@ -263,6 +265,11 @@
                                     <span class="badge bg-{{ $statusConfig[0] }} p-2">
                                         {{ $statusConfig[1] }}
                                     </span>
+                                    @if (Auth::user()->hasRole('owner'))
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status pesanan
+                                        </small>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -273,26 +280,28 @@
                                 <h5 class="mb-0">Status Pembayaran</h5>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('admin.orders.updatePaymentStatus', $order) }}" method="POST"
-                                    class="mb-3">
-                                    @csrf
-                                    @method('PATCH')
-                                    <div class="mb-3">
-                                        <label class="form-label">Status Pembayaran</label>
-                                        <select name="payment_status" class="form-select" onchange="this.form.submit()">
-                                            <option value="pending"
-                                                {{ $order->payment_status == 'pending' ? 'selected' : '' }}>Menunggu
-                                            </option>
-                                            <option value="paid"
-                                                {{ $order->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
-                                            <option value="failed"
-                                                {{ $order->payment_status == 'failed' ? 'selected' : '' }}>Gagal</option>
-                                            <option value="refunded"
-                                                {{ $order->payment_status == 'refunded' ? 'selected' : '' }}>Dikembalikan
-                                            </option>
-                                        </select>
-                                    </div>
-                                </form>
+                                @if (Auth::user()->hasRole('admin'))
+                                    <form action="{{ route('admin.orders.updatePaymentStatus', $order) }}" method="POST"
+                                        class="mb-3">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="mb-3">
+                                            <label class="form-label">Status Pembayaran</label>
+                                            <select name="payment_status" class="form-select" onchange="this.form.submit()">
+                                                <option value="pending"
+                                                    {{ $order->payment_status == 'pending' ? 'selected' : '' }}>Menunggu
+                                                </option>
+                                                <option value="paid"
+                                                    {{ $order->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
+                                                <option value="failed"
+                                                    {{ $order->payment_status == 'failed' ? 'selected' : '' }}>Gagal</option>
+                                                <option value="refunded"
+                                                    {{ $order->payment_status == 'refunded' ? 'selected' : '' }}>Dikembalikan
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                @endif
 
                                 @php
                                     $paymentBadges = [
@@ -306,6 +315,11 @@
                                 <span class="badge bg-{{ $paymentConfig[0] }}">
                                     {{ $paymentConfig[1] }}
                                 </span>
+                                @if (Auth::user()->hasRole('owner'))
+                                    <small class="text-muted d-block mt-2">
+                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat mengubah status pembayaran
+                                    </small>
+                                @endif
                             </div>
                         </div>
 
@@ -319,17 +333,25 @@
                                     <div class="alert alert-info">
                                         {{ $order->notes }}
                                     </div>
+                                @else
+                                    <p class="text-muted">Belum ada catatan untuk pesanan ini.</p>
                                 @endif
 
-                                <form action="{{ route('admin.orders.addNote', $order) }}" method="POST">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <textarea name="notes" class="form-control" rows="3" placeholder="Tambahkan catatan untuk pesanan ini...">{{ $order->notes }}</textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-save"></i> Simpan Catatan
-                                    </button>
-                                </form>
+                                @if (Auth::user()->hasRole('admin'))
+                                    <form action="{{ route('admin.orders.addNote', $order) }}" method="POST">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <textarea name="notes" class="form-control" rows="3" placeholder="Tambahkan catatan untuk pesanan ini...">{{ $order->notes }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-save"></i> Simpan Catatan
+                                        </button>
+                                    </form>
+                                @else
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> Hanya admin yang dapat menambah/mengubah catatan pesanan
+                                    </small>
+                                @endif
                             </div>
                         </div>
 
@@ -340,15 +362,21 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    @if ($order->status == 'cancelled')
-                                        <form action="{{ route('admin.orders.destroy', $order) }}" method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger w-100">
-                                                <i class="fas fa-trash"></i> Hapus Pesanan
-                                            </button>
-                                        </form>
+                                    @if (Auth::user()->hasRole('admin'))
+                                        @if ($order->status == 'cancelled')
+                                            <form action="{{ route('admin.orders.destroy', $order) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger w-100">
+                                                    <i class="fas fa-trash"></i> Hapus Pesanan
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @else
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle"></i> Hanya admin yang dapat melakukan aksi pada pesanan
+                                        </small>
                                     @endif
                                 </div>
                             </div>
