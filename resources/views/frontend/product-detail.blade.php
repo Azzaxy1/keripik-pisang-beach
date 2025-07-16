@@ -74,7 +74,7 @@
                                 {{ round((($product->price - $product->sale_price) / $product->price) * 100) }}% OFF
                             </span>
                         @else
-                            <span class="current-price h3 text-primary">Rp
+                            <span class="current-price h3" style="color: #f3b841; font-weight: bold;">Rp
                                 {{ number_format((float) $product->price, 0, ',', '.') }}</span>
                         @endif
                     </div>
@@ -102,7 +102,8 @@
                                     min="1" max="{{ $product->stock_quantity }}">
                             </div>
                             <div class="col-md-9">
-                                <button type="button" class="btn btn-primary btn-lg me-2"
+                                <button type="button" class="btn btn-lg me-2"
+                                    style="background-color: #f3b841; color: white; border: none;"
                                     onclick="addToCart({{ $product->id }})"
                                     {{ $product->stock_quantity <= 0 ? 'disabled' : '' }}>
                                     <i class="fas fa-cart-plus"></i> Add to Cart

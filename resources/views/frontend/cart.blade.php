@@ -153,7 +153,8 @@
                                     <i class="fas fa-credit-card"></i> Lanjut ke Checkout
                                 </a>
                             @else
-                                <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">
+                                <a href="{{ route('login') }}" class="btn w-100 mb-2"
+                                    style="background-color: #f3b841; color: white; border: none;">
                                     <i class="fas fa-sign-in-alt"></i> Login untuk Checkout
                                 </a>
                             @endauth

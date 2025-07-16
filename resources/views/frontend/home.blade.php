@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero-section bg-primary text-white py-5">
+    <section class="hero-section text-white py-5">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
@@ -88,7 +88,9 @@
                                             @endif
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <button class="btn btn-cart flex-fill" onclick="addToCart({{ $product->id }})">
+                                            <button class="btn btn-cart flex-fill"
+                                                style="background-color: #f3b841; color: white; border: none;"
+                                                onclick="addToCart({{ $product->id }})">
                                                 <i class="fas fa-cart-plus"></i> Add to Cart
                                             </button>
                                             <a href="{{ route('product.detail', $product->slug) }}"
@@ -103,7 +105,9 @@
                     @endforeach
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('shop') }}" class="btn btn-primary btn-lg">View All Products</a>
+                    <a href="{{ route('shop') }}" class="btn btn-lg" style="background-color: #f3b841; color: white;">
+                        Lihat Semua Produk
+                    </a>
                 </div>
             </div>
         </section>
@@ -267,7 +271,7 @@
 @push('styles')
     <style>
         .hero-section {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            background: #f3b841;
         }
 
         .category-card {

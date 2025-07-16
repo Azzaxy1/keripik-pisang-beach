@@ -84,7 +84,7 @@
         }
 
         .footer {
-            background-color: var(--dark-color);
+            background-color: #f3b841;
             color: white;
             padding: 3rem 0 1rem 0;
         }

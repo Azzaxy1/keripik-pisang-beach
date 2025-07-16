@@ -84,7 +84,8 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                            <button type="submit" class="btn w-100"
+                                style="background-color: #f3b841; color: white; border: none; ">Apply Filters</button>
                             <a href="{{ route('shop') }}" class="btn btn-outline-secondary w-100 mt-2">Clear Filters</a>
                         </form>
                     </div>
@@ -164,6 +165,7 @@
                                             </div>
                                             <div class="d-flex gap-2">
                                                 <button class="btn btn-cart flex-fill"
+                                                    style="background-color: #f3b841; color: white; border: none;"
                                                     onclick="addToCart({{ $product->id }})">
                                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                                 </button>

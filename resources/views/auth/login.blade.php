@@ -60,7 +60,8 @@
 
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn"
+                                        style="background-color: #f3b841; color: white; border: none;">
                                         {{ __('Login') }}
                                     </button>
 
