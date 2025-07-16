@@ -34,7 +34,15 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate(15);
+        // Menampilkan data yang terbaru
+        if ($request->has('sort') && $request->sort == 'latest') {
+            $query->latest();
+        } elseif ($request->has('sort') && $request->sort == 'oldest') {
+            $query->oldest();
+        } else {
+            $query->latest();
+        }
+        $orders = $query->paginate(15);
 
         return view('admin.orders.index', compact('orders'));
     }

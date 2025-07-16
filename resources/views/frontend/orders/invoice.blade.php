@@ -248,14 +248,14 @@
 
         <!-- Invoice Details -->
         <div class="invoice-details">
-            <div class="section">
+            {{-- <div class="section">
                 <h4>Tagihan Kepada:</h4>
                 <p><strong>{{ $order->user->name }}</strong></p>
                 <p>{{ $order->user->email }}</p>
                 @if ($order->user->phone)
                     <p>{{ $order->user->phone }}</p>
                 @endif
-            </div>
+            </div> --}}
 
             <div class="section">
                 <h4>Alamat Pengiriman:</h4>

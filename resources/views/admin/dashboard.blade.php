@@ -9,7 +9,7 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">Dashboard</h1>
-                    <small class="text-muted">Welcome back, {{ Auth::user()->name }}!</small>
+                    <small class="text-muted">Selamat datang kembali, {{ Auth::user()->name }}!</small>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Products</div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Produk</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalProducts }}</div>
                             </div>
                             <div class="col-auto">
@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Orders</div>
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Pesanan</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalOrders }}</div>
                             </div>
                             <div class="col-auto">
@@ -53,7 +53,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Users</div>
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Pengguna</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalUsers }}</div>
                             </div>
                             <div class="col-auto">
@@ -69,7 +69,8 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Revenue</div>
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Pendapatan
+                                </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">Rp
                                     {{ number_format($totalRevenue, 0, ',', '.') }}</div>
                             </div>
@@ -84,10 +85,10 @@
 
         <!-- Charts Row -->
         <div class="row mb-4">
-            <div class="col-xl-12 col-lg-12">
+            <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Monthly Sales Overview</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Ringkasan Penjualan Bulanan</h6>
                     </div>
                     <div class="card-body">
                         <canvas id="salesChart" width="400" height="200"></canvas>
@@ -95,32 +96,32 @@
                 </div>
             </div>
 
-            {{-- <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add New Product
-                        </a>
-                        <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
-                            <i class="fas fa-plus"></i> Add New Category
-                        </a>
-                        <a href="{{ route('admin.orders.index') }}" class="btn btn-info">
-                            <i class="fas fa-list"></i> View All Orders
-                        </a>
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-warning">
-                            <i class="fas fa-box"></i> Manage Products
-                        </a>
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-users"></i> User Management
-                        </a>
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Aksi Cepat</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Tambah Produk Baru
+                            </a>
+                            <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Tambah Kategori Baru
+                            </a>
+                            <a href="{{ route('admin.orders.index') }}" class="btn btn-info">
+                                <i class="fas fa-list"></i> Lihat Semua Pesanan
+                            </a>
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-warning">
+                                <i class="fas fa-box"></i> Kelola Produk
+                            </a>
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-users"></i> Manajemen Pengguna
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> --}}
         </div>
 
         <!-- Content Row -->
@@ -129,47 +130,120 @@
             <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
-                        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-primary">View All</a>
+                        <h6 class="m-0 font-weight-bold text-primary">Pesanan Terbaru</h6>
+                        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
                     </div>
                     <div class="card-body">
                         @if ($recentOrders->count() > 0)
                             <div class="table-responsive">
-                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                <table class="table table-striped table-hover" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Order #</th>
-                                            <th>Customer</th>
-                                            <th>Amount</th>
+                                            <th>No. Pesanan</th>
+                                            <th>Pelanggan</th>
+                                            <th>Total</th>
+                                            <th>Pembayaran</th>
                                             <th>Status</th>
-                                            <th>Date</th>
+                                            <th>Tanggal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($recentOrders as $order)
                                             <tr>
                                                 <td>
-                                                    <a href="{{ route('admin.orders.show', $order) }}"
-                                                        class="text-decoration-none">
-                                                        {{ $order->order_number }}
-                                                    </a>
+                                                    <div>
+                                                        <strong class="text-primary">
+                                                            <a href="{{ route('admin.orders.show', $order) }}"
+                                                                class="text-decoration-none">
+                                                                #{{ $order->order_number }}
+                                                            </a>
+                                                        </strong>
+                                                        <br>
+                                                        <small
+                                                            class="text-muted">{{ $order->created_at->format('H:i') }}</small>
+                                                    </div>
                                                 </td>
-                                                <td>{{ $order->user->name }}</td>
-                                                <td>Rp {{ number_format((float) $order->total_amount, 0, ',', '.') }}</td>
                                                 <td>
-                                                    <span
-                                                        class="badge bg-{{ $order->status == 'completed' ? 'success' : ($order->status == 'pending' ? 'warning' : 'info') }}">
-                                                        {{ ucfirst($order->status) }}
+                                                    <div class="d-flex align-items-center">
+                                                        @if ($order->user->avatar)
+                                                            <img src="{{ $order->user->avatar }}"
+                                                                alt="{{ $order->user->name }}" class="rounded-circle me-2"
+                                                                style="width: 30px; height: 30px; object-fit: cover;">
+                                                        @else
+                                                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                                style="width: 30px; height: 30px; font-size: 12px;">
+                                                                {{ strtoupper(substr($order->user->name, 0, 1)) }}
+                                                            </div>
+                                                        @endif
+                                                        <div>
+                                                            <div class="fw-bold">{{ Str::limit($order->user->name, 15) }}
+                                                            </div>
+                                                            <small
+                                                                class="text-muted">{{ Str::limit($order->user->email, 20) }}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <strong>Rp
+                                                            {{ number_format((float) $order->total_amount, 0, ',', '.') }}</strong>
+                                                        @if ($order->discount_amount > 0)
+                                                            <br>
+                                                            <small class="text-success">-Rp
+                                                                {{ number_format((float) $order->discount_amount, 0, ',', '.') }}</small>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $paymentBadges = [
+                                                            'pending' => ['warning', 'Menunggu'],
+                                                            'paid' => ['success', 'Lunas'],
+                                                            'failed' => ['danger', 'Gagal'],
+                                                            'refunded' => ['info', 'Dikembalikan'],
+                                                        ];
+                                                        $payment = $paymentBadges[$order->payment_status] ?? [
+                                                            'secondary',
+                                                            'Unknown',
+                                                        ];
+                                                    @endphp
+                                                    <span class="badge bg-{{ $payment[0] }}">
+                                                        {{ $payment[1] }}
                                                     </span>
                                                 </td>
-                                                <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                                <td>
+                                                    @php
+                                                        $statusBadges = [
+                                                            'pending' => ['warning', 'Menunggu'],
+                                                            'processing' => ['info', 'Diproses'],
+                                                            'shipped' => ['primary', 'Dikirim'],
+                                                            'delivered' => ['success', 'Diterima'],
+                                                            'cancelled' => ['danger', 'Dibatalkan'],
+                                                        ];
+                                                        $status = $statusBadges[$order->status] ?? [
+                                                            'secondary',
+                                                            'Unknown',
+                                                        ];
+                                                    @endphp
+                                                    <span class="badge bg-{{ $status[0] }}">
+                                                        {{ $status[1] }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        {{ $order->created_at->format('d M Y') }}
+                                                        <br>
+                                                        <small
+                                                            class="text-muted">{{ $order->created_at->diffForHumans() }}</small>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         @else
-                            <p class="text-center text-muted">No recent orders found.</p>
+                            <p class="text-center text-muted">Tidak ada pesanan terbaru ditemukan.</p>
                         @endif
                     </div>
                 </div>
@@ -179,7 +253,7 @@
             <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Top Selling Products</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Produk Terlaris</h6>
                     </div>
                     <div class="card-body">
                         @if ($topProducts->count() > 0)
@@ -189,12 +263,12 @@
                                         class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1">{{ Str::limit($product->name, 30) }}</h6>
-                                        <small class="text-muted">{{ $product->order_items_count }} sales</small>
+                                        <small class="text-muted">{{ $product->order_items_count }} terjual</small>
                                     </div>
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-center text-muted">No sales data available.</p>
+                            <p class="text-center text-muted">Tidak ada data penjualan tersedia.</p>
                         @endif
                     </div>
                 </div>
@@ -225,7 +299,7 @@
             data: {
                 labels: monthNames,
                 datasets: [{
-                    label: 'Sales (Rp)',
+                    label: 'Penjualan (Rp)',
                     data: salesData,
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -242,4 +316,47 @@
             }
         });
     </script>
+@endpush
+
+@push('styles')
+    <style>
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .badge {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.5em 0.75em;
+        }
+
+        /* Warna badge status yang konsisten */
+        .badge.bg-warning {
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+
+        .badge.bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        .badge.bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .badge.bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .badge.bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 @endpush
