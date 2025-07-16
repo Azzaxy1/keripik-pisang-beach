@@ -3,140 +3,143 @@
 @section('title', 'My Profile')
 
 @section('content')
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-3">
-            <!-- Profile Sidebar -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center mb-3">
-                        <img src="https://via.placeholder.com/80x80/007bff/ffffff?text={{ substr($user->name, 0, 1) }}" 
-                             alt="Profile" class="rounded-circle mb-2">
-                        <h6 class="mb-0">{{ $user->name }}</h6>
-                        <small class="text-muted">{{ $user->email }}</small>
-                    </div>
-                    <hr>
-                    <ul class="nav nav-pills flex-column" id="profileTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="profile-tab" data-bs-toggle="pill" 
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Sidebar -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <img src="https://via.placeholder.com/80x80/007bff/ffffff?text={{ substr($user->name, 0, 1) }}"
+                                alt="Profile" class="rounded-circle mb-2">
+                            <h6 class="mb-0">{{ $user->name }}</h6>
+                            <small class="text-muted">{{ $user->email }}</small>
+                        </div>
+                        <hr>
+                        <ul class="nav nav-pills flex-column" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="profile-tab" data-bs-toggle="pill"
                                     data-bs-target="#profile" type="button" role="tab">
-                                <i class="fas fa-user me-2"></i>Profile Information
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="password-tab" data-bs-toggle="pill" 
-                                    data-bs-target="#password" type="button" role="tab">
-                                <i class="fas fa-lock me-2"></i>Change Password
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="addresses-tab" data-bs-toggle="pill" 
+                                    <i class="fas fa-user me-2"></i>Profile Information
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="password-tab" data-bs-toggle="pill" data-bs-target="#password"
+                                    type="button" role="tab">
+                                    <i class="fas fa-lock me-2"></i>Change Password
+                                </button>
+                            </li>
+                            {{-- <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="addresses-tab" data-bs-toggle="pill"
                                     data-bs-target="#addresses" type="button" role="tab">
-                                <i class="fas fa-map-marker-alt me-2"></i>Addresses
-                            </button>
-                        </li>
-                    </ul>
+                                    <i class="fas fa-map-marker-alt me-2"></i>Addresses
+                                </button>
+                            </li> --}}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-9">
-            <!-- Profile Content -->
-            <div class="tab-content" id="profileTabsContent">
-                <!-- Profile Information Tab -->
-                <div class="tab-pane fade show active" id="profile" role="tabpanel">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Profile Information</h5>
-                        </div>
-                        <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success">{{ session('success') }}</div>
-                            @endif
-                            
-                            <form action="{{ route('profile.update') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                               id="name" name="name" value="{{ old('name', $user->name) }}" required>
-                                        @error('name')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+
+            <div class="col-md-9">
+                <!-- Profile Content -->
+                <div class="tab-content" id="profileTabsContent">
+                    <!-- Profile Information Tab -->
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Profile Information</h5>
+                            </div>
+                            <div class="card-body">
+                                @if (session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                @endif
+
+                                <form action="{{ route('profile.update') }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="name" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                id="name" name="name" value="{{ old('name', $user->name) }}"
+                                                required>
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                                id="email" name="email" value="{{ old('email', $user->email) }}"
+                                                required>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                               id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                                        @error('email')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                                id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                                            @error('phone')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control @error('phone') is-invalid @enderror" 
-                                               id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
-                                        @error('phone')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary">Update Profile</button>
-                            </form>
+
+                                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Change Password Tab -->
-                <div class="tab-pane fade" id="password" role="tabpanel">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Change Password</h5>
-                        </div>
-                        <div class="card-body">
-                            <form action="{{ route('profile.password') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                
-                                <div class="mb-3">
-                                    <label for="current_password" class="form-label">Current Password</label>
-                                    <input type="password" class="form-control @error('current_password') is-invalid @enderror" 
-                                           id="current_password" name="current_password" required>
-                                    @error('current_password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">New Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                           id="password" name="password" required>
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="password_confirmation" class="form-label">Confirm New Password</label>
-                                    <input type="password" class="form-control" 
-                                           id="password_confirmation" name="password_confirmation" required>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary">Update Password</button>
-                            </form>
+
+                    <!-- Change Password Tab -->
+                    <div class="tab-pane fade" id="password" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Change Password</h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('profile.password') }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="mb-3">
+                                        <label for="current_password" class="form-label">Current Password</label>
+                                        <input type="password"
+                                            class="form-control @error('current_password') is-invalid @enderror"
+                                            id="current_password" name="current_password" required>
+                                        @error('current_password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">New Password</label>
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                            id="password" name="password" required>
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control" id="password_confirmation"
+                                            name="password_confirmation" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Addresses Tab -->
+
+                    {{-- <!-- Addresses Tab -->
                 <div class="tab-pane fade" id="addresses" role="tabpanel">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
@@ -146,13 +149,13 @@
                             </button>
                         </div>
                         <div class="card-body">
-                            @if($addresses->count() > 0)
+                            @if ($addresses->count() > 0)
                                 <div class="row">
-                                    @foreach($addresses as $address)
+                                    @foreach ($addresses as $address)
                                         <div class="col-md-6 mb-3">
                                             <div class="card h-100">
                                                 <div class="card-body">
-                                                    @if($address->is_default)
+                                                    @if ($address->is_default)
                                                         <span class="badge bg-primary mb-2">Default</span>
                                                     @endif
                                                     <h6 class="card-title">
@@ -161,7 +164,7 @@
                                                     </h6>
                                                     <p class="card-text">
                                                         {{ $address->address_line_1 }}<br>
-                                                        @if($address->address_line_2)
+                                                        @if ($address->address_line_2)
                                                             {{ $address->address_line_2 }}<br>
                                                         @endif
                                                         {{ $address->city }}, {{ $address->state }} {{ $address->postal_code }}<br>
@@ -191,13 +194,13 @@
                             @endif
                         </div>
                     </div>
+                </div> --}}
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Add Address Modal -->
+    {{-- <!-- Add Address Modal -->
 <div class="modal fade" id="addAddressModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -283,5 +286,5 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

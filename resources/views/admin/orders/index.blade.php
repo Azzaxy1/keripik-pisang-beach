@@ -9,7 +9,7 @@
                 <!-- Header dengan filter dan stats -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Orders Management</h2>
-                    <div class="d-flex gap-2">
+                    {{-- <div class="d-flex gap-2">
                         <div class="btn-group">
                             <button class="btn btn-outline-primary btn-sm" onclick="filterOrders('all')">Semua</button>
                             <button class="btn btn-outline-warning btn-sm" onclick="filterOrders('pending')">Menunggu</button>
@@ -22,7 +22,7 @@
                             <button class="btn btn-outline-danger btn-sm"
                                 onclick="filterOrders('cancelled')">Dibatalkan</button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 @if (session('success'))
