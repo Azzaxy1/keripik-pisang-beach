@@ -127,6 +127,7 @@
                                                         'processing' => ['info', 'Diproses'],
                                                         'shipped' => ['primary', 'Dikirim'],
                                                         'delivered' => ['success', 'Diterima'],
+                                                        'completed' => ['dark', 'Selesai'],
                                                         'cancelled' => ['danger', 'Dibatalkan'],
                                                     ];
                                                     $status = $statusBadges[$order->status] ?? ['secondary', 'Unknown'];

@@ -61,7 +61,7 @@ class OrderController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled'
+            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,completed,cancelled'
         ]);
 
         $oldStatus = $order->status;
@@ -91,6 +91,22 @@ class OrderController extends Controller
         $order->update(['payment_status' => $request->payment_status]);
 
         return back()->with('success', 'Status pembayaran berhasil diperbarui.');
+    }
+
+    public function updateTrackingNumber(Request $request, Order $order)
+    {
+        // Cek apakah user memiliki role admin
+        if (!auth()->user()->hasRole('admin')) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk mengubah nomor resi.');
+        }
+
+        $request->validate([
+            'tracking_number' => 'required|string|max:50'
+        ]);
+
+        $order->update(['tracking_number' => $request->tracking_number]);
+
+        return back()->with('success', 'Nomor resi berhasil diperbarui.');
     }
 
     public function addNote(Request $request, Order $order)

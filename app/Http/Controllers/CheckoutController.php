@@ -55,7 +55,7 @@ class CheckoutController extends Controller
     public function process(Request $request)
     {
         Log::info('Checkout process started', ['user_id' => Auth::id()]);
-        
+
         try {
             $request->validate([
                 'payment_method' => 'required|in:bank_transfer',
@@ -63,9 +63,10 @@ class CheckoutController extends Controller
                 'customer_name' => 'required|string|max:255',
                 'customer_phone' => 'required|string|max:20',
                 'customer_address' => 'required|string|max:500',
+                'courier_service' => 'required|string',
                 'order_notes' => 'nullable|string|max:1000',
             ]);
-            
+
             Log::info('Validation passed');
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -140,6 +141,7 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
                 'payment_proof' => $paymentProofPath,
                 'bank_account_info' => json_encode($bankAccountInfo),
+                'courier_service' => $request->courier_service,
                 'shipping_address_id' => null,
                 'billing_address_id' => null,
                 'shipping_address' => $customerData,
@@ -151,7 +153,7 @@ class CheckoutController extends Controller
             // Simpan order items dan kurangi stok produk
             foreach ($cartItems as $cartItem) {
                 $product = $cartItem->product;
-                
+
                 // Cek apakah stok mencukupi (double check)
                 if ($product->stock_quantity < $cartItem->quantity) {
                     throw new \Exception("Stok {$product->name} tidak mencukupi. Stok tersedia: {$product->stock_quantity}, diminta: {$cartItem->quantity}");
@@ -173,9 +175,9 @@ class CheckoutController extends Controller
                     'current_stock' => $product->stock_quantity,
                     'quantity_to_subtract' => $cartItem->quantity
                 ]);
-                
+
                 $decrementResult = $product->decrementStock($cartItem->quantity);
-                
+
                 Log::info('Stock decremented', [
                     'result' => $decrementResult,
                     'new_stock' => $product->fresh()->stock_quantity

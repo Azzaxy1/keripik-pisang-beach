@@ -131,6 +131,15 @@
                                         <p class="card-text text-muted small">
                                             {{ Str::limit($product->short_description, 80) }}</p>
 
+                                        @if ($product->sold_count > 0)
+                                            <div class="mb-2">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-shopping-bag text-success"></i>
+                                                    {{ $product->sold_count }} terjual
+                                                </small>
+                                            </div>
+                                        @endif
+
                                         <!-- Rating -->
                                         @if ($product->average_rating > 0)
                                             <div class="mb-2">

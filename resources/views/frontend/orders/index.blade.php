@@ -23,8 +23,10 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h6 class="mb-0">Pesanan #{{ $order->order_number }}</h6>                            <small class="text-muted">Dipesan pada
-                                {{ $order->created_at->format('d M Y') }} pukul {{ $order->created_at->format('H:i') }}</small>
+                                            <h6 class="mb-0">Pesanan #{{ $order->order_number }}</h6> <small
+                                                class="text-muted">Dipesan pada
+                                                {{ $order->created_at->format('d M Y') }} pukul
+                                                {{ $order->created_at->format('H:i') }}</small>
                                         </div>
                                         <div class="text-end">
                                             @php
@@ -35,6 +37,7 @@
                                                     'shipped' => 'Dikirim',
                                                     'delivered' => 'Diterima',
                                                     'cancelled' => 'Dibatalkan',
+                                                    'completed' => 'Selesai',
                                                     'refunded' => 'Dikembalikan',
                                                 ];
 
@@ -45,6 +48,7 @@
                                                     'shipped' => 'info',
                                                     'delivered' => 'success',
                                                     'cancelled' => 'danger',
+                                                    'completed' => 'dark',
                                                     'refunded' => 'secondary',
                                                 ];
                                             @endphp

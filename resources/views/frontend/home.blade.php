@@ -75,6 +75,14 @@
                                     <h6 class="card-title">{{ Str::limit($product->name, 50) }}</h6>
                                     <p class="card-text text-muted small">{{ Str::limit($product->short_description, 80) }}
                                     </p>
+                                    @if ($product->sold_count > 0)
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-shopping-bag text-success"></i>
+                                                {{ $product->sold_count }} terjual
+                                            </small>
+                                        </div>
+                                    @endif
                                     <div class="mt-auto">
                                         <div class="price-section mb-3">
                                             @if ($product->sale_price && $product->sale_price < $product->price)

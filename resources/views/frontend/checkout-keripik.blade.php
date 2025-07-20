@@ -71,6 +71,23 @@
                                 </div>
                             </div>
 
+                            <!-- Courier Selection -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-truck"></i> Pilih Kurir Pengiriman *</h6>
+                                <select class="form-select" name="courier_service" id="courier_service" required>
+                                    <option value="">-- Pilih Kurir --</option>
+                                    <option value="jne">JNE</option>
+                                    <option value="pos">Pos Indonesia</option>
+                                    <option value="tiki">TIKI</option>
+                                    <option value="jnt">J&T Express</option>
+                                    <option value="sicepat">SiCepat</option>
+                                    <option value="anteraja">AnterAja</option>
+                                    <option value="gosend">GoSend</option>
+                                    <option value="grab">GrabExpress</option>
+                                </select>
+                                <small class="text-muted">Pilih kurir yang Anda inginkan untuk pengiriman pesanan</small>
+                            </div>
+
                             <!-- Bank Account Info -->
                             <div class="mb-4">
                                 <div class="card bg-light">

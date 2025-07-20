@@ -21,6 +21,7 @@ class Product extends Model
         'category_id',
         'brand_id',
         'stock_quantity',
+        'sold_count',
         'manage_stock',
         'stock_status',
         'weight',
@@ -39,6 +40,7 @@ class Product extends Model
         'sale_price' => 'decimal:2',
         'weight' => 'decimal:2',
         'stock_quantity' => 'integer',
+        'sold_count' => 'integer',
         'manage_stock' => 'boolean',
         'status' => 'boolean',
         'featured' => 'boolean',
@@ -107,7 +109,7 @@ class Product extends Model
     public function updateStockStatus()
     {
         $newStatus = 'in_stock';
-        
+
         if (!$this->manage_stock) {
             $newStatus = 'in_stock';
         } elseif ($this->stock_quantity <= 0) {
@@ -115,7 +117,7 @@ class Product extends Model
         } elseif ($this->stock_quantity <= 5) { // Low stock threshold
             $newStatus = 'low_stock';
         }
-        
+
         // Hanya update jika status berubah
         if ($this->stock_status !== $newStatus) {
             $this->updateQuietly(['stock_status' => $newStatus]);
@@ -165,17 +167,17 @@ class Product extends Model
             }
             return asset('storage/products/' . $this->attributes['featured_image']);
         }
-        
+
         // Fallback to first image from images relationship
         $firstImage = $this->images()->first();
         if ($firstImage) {
             if ($firstImage->image) {
-                return str_starts_with($firstImage->image, 'storage/') 
-                    ? asset($firstImage->image) 
+                return str_starts_with($firstImage->image, 'storage/')
+                    ? asset($firstImage->image)
                     : asset('storage/products/' . $firstImage->image);
             }
         }
-        
+
         return 'https://via.placeholder.com/400x300?text=No+Image';
     }
 

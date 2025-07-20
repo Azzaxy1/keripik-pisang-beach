@@ -9,7 +9,8 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2>Pesanan #{{ $order->order_number }}</h2>
-                        <p class="text-muted mb-0">Dipesan pada {{ $order->created_at->format('d M Y') }} pukul {{ $order->created_at->format('H:i') }}</p>
+                        <p class="text-muted mb-0">Dipesan pada {{ $order->created_at->format('d M Y') }} pukul
+                            {{ $order->created_at->format('H:i') }}</p>
                     </div>
                     <span
                         class="badge p-2
@@ -20,6 +21,7 @@ $badgeColors = [
                                 'processing' => 'bg-primary',
                                 'shipped' => 'bg-info',
                                 'delivered' => 'bg-success',
+                                'completed' => 'bg-dark',
                                 'cancelled' => 'bg-danger',
                                 'refunded' => 'bg-secondary'
                             ];
@@ -31,6 +33,7 @@ $badgeColors = [
                                 'processing' => 'Diproses',
                                 'shipped' => 'Dikirim',
                                 'delivered' => 'Diterima',
+                                'completed' => 'Selesai',
                                 'cancelled' => 'Dibatalkan',
                                 'refunded' => 'Dikembalikan',
                             ];
@@ -147,6 +150,21 @@ $badgeColors = [
                                             </p>
                                         </div>
                                     </div>
+                                    <div class="timeline-item {{ $order->status === 'completed' ? 'completed' : '' }}">
+                                        <div
+                                            class="timeline-marker {{ $order->status === 'completed' ? 'bg-dark' : 'bg-secondary' }}">
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h6 class="timeline-title">Selesai</h6>
+                                            <p class="timeline-description">
+                                                @if ($order->status === 'completed')
+                                                    <span class="text-dark fw-bold">Status Saat Ini</span>
+                                                @else
+                                                    Pesanan telah selesai dan ditutup
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -221,6 +239,42 @@ $badgeColors = [
                             </div>
                         </div>
 
+                        <!-- Shipping Information -->
+                        @if ($order->courier_service || $order->tracking_number)
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Informasi Pengiriman</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if ($order->courier_service)
+                                        <div class="mb-2">
+                                            <strong>Kurir:</strong>
+                                            @php
+                                                $courierNames = [
+                                                    'jne' => 'JNE',
+                                                    'pos' => 'Pos Indonesia',
+                                                    'tiki' => 'TIKI',
+                                                    'jnt' => 'J&T Express',
+                                                    'sicepat' => 'SiCepat',
+                                                    'anteraja' => 'AnterAja',
+                                                    'gosend' => 'GoSend',
+                                                    'grab' => 'GrabExpress',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="badge bg-info">{{ $courierNames[$order->courier_service] ?? $order->courier_service }}</span>
+                                        </div>
+                                    @endif
+                                    @if ($order->tracking_number)
+                                        <div class="mb-2">
+                                            <strong>No. Resi:</strong>
+                                            <code>{{ $order->tracking_number }}</code>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Payment Information -->
                         <div class="card mb-4">
                             <div class="card-header">
@@ -274,7 +328,25 @@ $badgeColors = [
                                 <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Pesanan
                             </a>
 
-                            @if (in_array($order->status, ['delivered', 'shipped']))
+                            @if ($order->getAttribute('status') === 'delivered' && !$order->getAttribute('completed_at'))
+                                <form action="{{ route('orders.markAsCompleted', $order) }}" method="POST"
+                                    onsubmit="return confirm('Apakah Anda yakin telah menerima pesanan ini dengan baik?')">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="fas fa-check-circle me-1"></i> Pesanan Selesai
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if ($order->getAttribute('completed_at'))
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Pesanan ditandai selesai pada
+                                    {{ $order->getAttribute('completed_at')->format('d M Y H:i') }}
+                                </div>
+                            @endif
+
+                            @if (in_array($order->status, ['delivered', 'shipped', 'completed']))
                                 <a href="{{ route('orders.invoice', $order) }}" class="btn btn-outline-success">
                                     <i class="fas fa-download me-1"></i> Unduh Invoice
                                 </a>

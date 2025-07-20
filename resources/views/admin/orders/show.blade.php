@@ -247,6 +247,8 @@
                                                     Dikirim</option>
                                                 <option value="delivered"
                                                     {{ $order->status == 'delivered' ? 'selected' : '' }}>Diterima</option>
+                                                <option value="completed"
+                                                    {{ $order->status == 'completed' ? 'selected' : '' }}>Selesai</option>
                                                 <option value="cancelled"
                                                     {{ $order->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan
                                                 </option>
@@ -262,6 +264,7 @@
                                             'processing' => ['info', 'Diproses'],
                                             'shipped' => ['primary', 'Dikirim'],
                                             'delivered' => ['success', 'Diterima'],
+                                            'completed' => ['dark', 'Selesai'],
                                             'cancelled' => ['danger', 'Dibatalkan'],
                                         ];
                                         $statusConfig = $statusBadges[$order->status] ?? ['secondary', 'Unknown'];
@@ -275,6 +278,67 @@
                                             pesanan
                                         </small>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Courier and Tracking Management -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Informasi Pengiriman</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="flex justify-content-between align-items-center mb-3">
+                                    <div class="">
+                                        <div class="mb-3">
+                                            <label class="form-label">Kurir</label>
+                                            @if ($order->courier_service)
+                                                @php
+                                                    $courierNames = [
+                                                        'jne' => 'JNE',
+                                                        'pos' => 'Pos Indonesia',
+                                                        'tiki' => 'TIKI',
+                                                        'jnt' => 'J&T Express',
+                                                        'sicepat' => 'SiCepat',
+                                                        'anteraja' => 'AnterAja',
+                                                        'gosend' => 'GoSend',
+                                                        'grab' => 'GrabExpress',
+                                                    ];
+                                                @endphp
+                                                <div class="form-control-plaintext">
+                                                    <span
+                                                        class="badge bg-info">{{ $courierNames[$order->courier_service] ?? $order->courier_service }}</span>
+                                                </div>
+                                            @else
+                                                <div class="form-control-plaintext text-muted">Belum dipilih</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        @if (Auth::user()->hasRole('admin'))
+                                            <form action="{{ route('admin.orders.updateTrackingNumber', $order) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <div class="mb-3">
+                                                    <label class="form-label">No. Resi</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="tracking_number" class="form-control"
+                                                            value="{{ $order->tracking_number }}"
+                                                            placeholder="Masukkan nomor resi">
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @else
+                                            <div class="mb-3">
+                                                <label class="form-label">No. Resi</label>
+                                                <div class="form-control-plaintext">
+                                                    {{ $order->tracking_number ?? 'Belum tersedia' }}
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>

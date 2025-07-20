@@ -29,8 +29,11 @@ class Order extends Model
         'billing_address',
         'notes',
         'currency',
+        'courier_service',
+        'tracking_number',
         'shipped_at',
-        'delivered_at'
+        'delivered_at',
+        'completed_at'
     ];
 
     protected $casts = [
@@ -42,7 +45,8 @@ class Order extends Model
         'shipping_address' => 'array',
         'billing_address' => 'array',
         'shipped_at' => 'datetime',
-        'delivered_at' => 'datetime'
+        'delivered_at' => 'datetime',
+        'completed_at' => 'datetime'
     ];
 
     // Order status constants
@@ -50,6 +54,7 @@ class Order extends Model
     const STATUS_PROCESSING = 'processing';
     const STATUS_SHIPPED = 'shipped';
     const STATUS_DELIVERED = 'delivered';
+    const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
     const STATUS_REFUNDED = 'refunded';
 
@@ -128,18 +133,58 @@ class Order extends Model
     }
 
     /**
-     * Override update method untuk handle perubahan status
+     * Update sold count produk ketika order completed
      */
-    public function update(array $attributes = [], array $options = [])
+    public function updateProductSoldCount()
     {
-        $oldStatus = $this->status;
-        $result = parent::update($attributes, $options);
-        
-        // Jika status berubah menjadi cancelled, kembalikan stok
-        if (isset($attributes['status']) && $attributes['status'] === self::STATUS_CANCELLED && $oldStatus !== self::STATUS_CANCELLED) {
-            $this->restoreStock();
+        foreach ($this->items as $item) {
+            $product = $item->product;
+            if ($product) {
+                $product->increment('sold_count', $item->quantity);
+            }
         }
-        
-        return $result;
+    }
+
+    /**
+     * Mark order as completed by customer
+     */
+    public function markAsCompleted()
+    {
+        $oldStatus = $this->getAttribute('status');
+
+        // Update status dan completed_at secara langsung tanpa trigger override update
+        $this->setAttribute('status', self::STATUS_COMPLETED);
+        $this->setAttribute('completed_at', now());
+        $this->save();
+
+        // Update sold count produk jika status berubah dari delivered ke completed
+        if ($oldStatus === self::STATUS_DELIVERED) {
+            $this->updateProductSoldCount();
+        }
+    }
+
+    /**
+     * Get available courier services
+     */
+    public static function getCourierServices()
+    {
+        return [
+            'jne' => 'JNE',
+            'pos' => 'Pos Indonesia',
+            'tiki' => 'TIKI',
+            'jnt' => 'J&T Express',
+            'sicepat' => 'SiCepat',
+            'anteraja' => 'AnterAja',
+            'gosend' => 'GoSend',
+            'grab' => 'GrabExpress'
+        ];
+    }
+
+    /**
+     * Check if order can be marked as completed by customer
+     */
+    public function canBeCompletedByCustomer()
+    {
+        return $this->getAttribute('status') === self::STATUS_DELIVERED;
     }
 }

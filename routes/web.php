@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
@@ -73,6 +74,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/failed/{order}', [PaymentController::class, 'failed'])->name('failed');
         Route::get('/retry/{order}', [PaymentController::class, 'retry'])->name('retry');
     });
+
+    // Customer Order Management
+    Route::post('/orders/{order}/complete', [CustomerOrderController::class, 'markAsCompleted'])->name('orders.markAsCompleted');
 });
 
 // Authentication Routes
@@ -96,6 +100,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('orders', OrderController::class)->only(['index', 'show', 'destroy']);
     Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::patch('orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
+    Route::patch('orders/{order}/tracking-number', [OrderController::class, 'updateTrackingNumber'])->name('orders.updateTrackingNumber');
     Route::post('orders/{order}/note', [OrderController::class, 'addNote'])->name('orders.addNote');
     Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
