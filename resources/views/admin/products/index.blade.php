@@ -28,16 +28,17 @@
                             <table class="table table-striped table-hover" id="products-table">
                                 <thead class="table-light">
                                     <tr>
-                                        <th width="8%">ID</th>
-                                        <th width="12%">Foto</th>
-                                        <th width="20%">Nama Produk</th>
-                                        <th width="12%">Kategori</th>
+                                        <th width="6%">ID</th>
+                                        <th width="10%">Foto</th>
+                                        <th width="18%">Nama Produk</th>
+                                        <th width="10%">Kategori</th>
                                         <th width="10%">Harga</th>
                                         <th width="10%">Harga Promo</th>
-                                        <th width="8%">Stok</th>
+                                        <th width="7%">Stok</th>
+                                        <th width="7%">Terjual</th>
                                         <th width="10%">Status Stok</th>
-                                        <th width="8%">Status</th>
-                                        <th width="10%">Aksi</th>
+                                        <th width="7%">Status</th>
+                                        <th width="5%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,17 +82,45 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 @php
-                                                    $stockStatusClass = match($product->stock_status) {
+                                                    $soldCount = $product->sold_count ?? 0;
+                                                    $badgeClass = 'bg-info';
+                                                    $extraClass = '';
+
+                                                    if ($soldCount >= 50) {
+                                                        $badgeClass = 'bg-success';
+                                                        $extraClass = 'sold-bestseller';
+                                                    } elseif ($soldCount >= 20) {
+                                                        $badgeClass = 'bg-warning text-dark';
+                                                    } elseif ($soldCount == 0) {
+                                                        $badgeClass = 'bg-secondary';
+                                                    }
+                                                @endphp
+                                                <span class="badge {{ $badgeClass }} fs-6 {{ $extraClass }}">
+                                                    {{ $soldCount }}
+                                                </span>
+                                                @if ($soldCount >= 50)
+                                                    <br><small class="text-success fw-bold">Best Seller!</small>
+                                                @elseif($soldCount >= 20)
+                                                    <br><small class="text-warning">Popular</small>
+                                                @elseif($soldCount > 0)
+                                                    <br><small class="text-muted">terjual</small>
+                                                @else
+                                                    <br><small class="text-muted">belum terjual</small>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @php
+                                                    $stockStatusClass = match ($product->stock_status) {
                                                         'in_stock' => 'success',
                                                         'low_stock' => 'warning',
                                                         'out_of_stock' => 'danger',
-                                                        default => 'secondary'
+                                                        default => 'secondary',
                                                     };
-                                                    $stockStatusText = match($product->stock_status) {
+                                                    $stockStatusText = match ($product->stock_status) {
                                                         'in_stock' => 'Tersedia',
                                                         'low_stock' => 'Stok Sedikit',
                                                         'out_of_stock' => 'Habis',
-                                                        default => 'Unknown'
+                                                        default => 'Unknown',
                                                     };
                                                 @endphp
                                                 <span class="badge bg-{{ $stockStatusClass }} fs-6">
@@ -147,8 +176,39 @@
             $('#products-table').DataTable({
                 "pageLength": 25,
                 "ordering": true,
-                "searching": true
+                "searching": true,
+                "order": [
+                    [7, "desc"] // Sort by sold count (terjual) descending by default
+                ],
+                "columnDefs": [{
+                    "orderable": false,
+                    "targets": [1, 10] // Foto dan Aksi tidak bisa di-sort
+                }]
             });
         });
     </script>
+@endpush
+
+@push('styles')
+    <style>
+        .badge.bg-info {
+            background-color: #0dcaf0 !important;
+            color: #000 !important;
+        }
+
+        .table th {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .table td {
+            font-size: 0.875rem;
+            vertical-align: middle;
+        }
+
+        /* Highlight untuk produk best seller */
+        tr:has(.sold-bestseller) {
+            background-color: #fff3cd !important;
+        }
+    </style>
 @endpush

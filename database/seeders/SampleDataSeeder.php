@@ -289,48 +289,48 @@ class SampleDataSeeder extends Seeder
             switch ($product->slug) {
                 // Original
                 case 'keripik-pisang-original-1kg':
-                    $imageName = 'keripik-pisang-original-1kg.jpg';
+                    $imageName = 'keripik-original-1kg.jpg';
                     break;
                 case 'keripik-pisang-original-2kg':
-                    $imageName = 'keripik-pisang-original-2kg.jpg';
+                    $imageName = 'keripik-original-2kg.jpg';
                     break;
                 case 'keripik-pisang-original-5kg':
-                    $imageName = 'keripik-pisang-original-3kg.jpg';
+                    $imageName = 'keripik-original-5kg.jpg';
                     break;
                 case 'keripik-pisang-original-10kg':
-                    $imageName = 'keripik-pisang-original.jpg';
+                    $imageName = 'keripik-original-10kg.jpg';
                     break;
 
                 // Asin
                 case 'keripik-pisang-asin-1kg':
-                    $imageName = 'keripik-pisang-asin.jpg';
+                    $imageName = 'keripik-asin-1kg.jpg';
                     break;
                 case 'keripik-pisang-asin-2kg':
-                    $imageName = 'keripik-pisang-asin.jpg';
+                    $imageName = 'keripik-asin-2kg.jpg';
                     break;
 
                 // Coklat
                 case 'keripik-pisang-coklat-1kg':
-                    $imageName = 'keripik-pisang-cokelat.jpeg';
+                    $imageName = 'keripik-coklat-1kg.jpg';
                     break;
                 case 'keripik-pisang-coklat-2kg':
-                    $imageName = 'keripik-pisang-cokelat.jpeg';
+                    $imageName = 'keripik-coklat-2kg.jpg';
                     break;
 
                 // Balado
                 case 'keripik-pisang-balado-1kg':
-                    $imageName = 'keripik-pisang-balado.jpg';
+                    $imageName = 'keripik-balado-1kg.jpg';
                     break;
                 case 'keripik-pisang-balado-2kg':
-                    $imageName = 'keripik-pisang-balado.jpg';
+                    $imageName = 'keripik-balado-2kg.jpg';
                     break;
 
                 // Pedas
                 case 'keripik-pisang-pedas-1kg':
-                    $imageName = 'keripik-pisang-pedas.jpg';
+                    $imageName = 'keripik-pedas-1kg.jpg';
                     break;
                 case 'keripik-pisang-pedas-2kg':
-                    $imageName = 'keripik-pisang-pedas.jpg';
+                    $imageName = 'keripik-pedas-2kg.jpg';
                     break;
 
                 default:

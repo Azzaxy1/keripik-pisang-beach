@@ -52,9 +52,9 @@
                 <div class="product-details">
                     <h1 class="product-title">{{ $product->name }}</h1>
 
-                    @if ($product->brand)
+                    {{-- @if ($product->brand)
                         <p class="text-muted mb-2">Brand: <strong>{{ $product->brand->name }}</strong></p>
-                    @endif
+                    @endif --}}
 
                     {{-- <div class="product-rating mb-3">
                         @php $rating = $product->average_rating ?? 0; @endphp
@@ -76,6 +76,14 @@
                         @else
                             <span class="current-price h3" style="color: #f3b841; font-weight: bold;">Rp
                                 {{ number_format((float) $product->price, 0, ',', '.') }}</span>
+                        @endif
+                        @if ($product->sold_count > 0)
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-shopping-bag text-success"></i>
+                                    {{ $product->sold_count }} terjual
+                                </small>
+                            </div>
                         @endif
                     </div>
 
