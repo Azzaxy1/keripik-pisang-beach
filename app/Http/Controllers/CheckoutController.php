@@ -39,11 +39,11 @@ class CheckoutController extends Controller
         $shipping = $subtotal >= 100000 ? 0 : 5000; // Gratis ongkir untuk pembelian di atas 100rb
         $total = $subtotal + $tax + $shipping;
 
-        // Info rekening BCA
+        // Info rekening BCA / PERUBAHAN TRANSFER
         $bankAccount = [
             'bank_name' => 'Bank BCA',
-            'account_number' => '1234567890',
-            'account_name' => 'Keripik Pisang Cinangka'
+            'account_number' => '1314151617',
+            'account_name' => 'Keripik Pisang Beach'
         ];
 
         return view('frontend.checkout-keripik', compact('cartItems', 'subtotal', 'tax', 'shipping', 'total', 'bankAccount'));

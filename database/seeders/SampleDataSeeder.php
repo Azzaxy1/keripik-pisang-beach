@@ -289,13 +289,13 @@ class SampleDataSeeder extends Seeder
             switch ($product->slug) {
                 // Original
                 case 'keripik-pisang-original-1kg':
-                    $imageName = 'keripik-pisang-original.jpg';
+                    $imageName = 'keripik-pisang-original-1kg.jpg';
                     break;
                 case 'keripik-pisang-original-2kg':
-                    $imageName = 'keripik-pisang-original.jpg';
+                    $imageName = 'keripik-pisang-original-2kg.jpg';
                     break;
                 case 'keripik-pisang-original-5kg':
-                    $imageName = 'keripik-pisang-original.jpg';
+                    $imageName = 'keripik-pisang-original-3kg.jpg';
                     break;
                 case 'keripik-pisang-original-10kg':
                     $imageName = 'keripik-pisang-original.jpg';
