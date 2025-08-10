@@ -12,20 +12,20 @@
                         <p class="text-muted mb-0">Dipesan pada {{ $order->created_at->format('d M Y') }} pukul
                             {{ $order->created_at->format('H:i') }}</p>
                     </div>
-                    <span
-                        class="badge p-2
+                    {{-- buat teks di tengah --}}
+                    <div style="width: 350px;" class="alert mb-0 py-2 px-3 d-flex justify-content-center align-items-center
                         @php
 $badgeColors = [
-                                'pending' => 'bg-warning',
-                                'confirmed' => 'bg-info',
-                                'processing' => 'bg-primary',
-                                'shipped' => 'bg-info',
-                                'delivered' => 'bg-success',
-                                'completed' => 'bg-dark',
-                                'cancelled' => 'bg-danger',
-                                'refunded' => 'bg-secondary'
+                                'pending' => 'alert-warning',
+                                'confirmed' => 'alert-info',
+                                'processing' => 'alert-primary',
+                                'shipped' => 'alert-info',
+                                'delivered' => 'alert-success',
+                                'completed' => 'alert-dark',
+                                'cancelled' => 'alert-danger',
+                                'refunded' => 'alert-secondary'
                             ];
-                            echo $badgeColors[$order->status] ?? 'bg-secondary'; @endphp">
+                            echo $badgeColors[$order->status] ?? 'alert-secondary'; @endphp">
                         @php
                             $statusTranslations = [
                                 'pending' => 'Menunggu',
@@ -37,9 +37,20 @@ $badgeColors = [
                                 'cancelled' => 'Dibatalkan',
                                 'refunded' => 'Dikembalikan',
                             ];
+                            $statusIcons = [
+                                'pending' => 'fas fa-clock',
+                                'confirmed' => 'fas fa-check',
+                                'processing' => 'fas fa-cogs',
+                                'shipped' => 'fas fa-shipping-fast',
+                                'delivered' => 'fas fa-check-circle',
+                                'completed' => 'fas fa-check-double',
+                                'cancelled' => 'fas fa-times-circle',
+                                'refunded' => 'fas fa-undo',
+                            ];
                         @endphp
-                        {{ $statusTranslations[$order->status] ?? ucfirst($order->status) }}
-                    </span>
+                        <i class="{{ $statusIcons[$order->status] ?? 'fas fa-info-circle' }} me-2"></i>
+                        <strong>{{ $statusTranslations[$order->status] ?? ucfirst($order->status) }}</strong>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -97,8 +108,19 @@ $badgeColors = [
                                         class="timeline-item {{ in_array($order->status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered']) ? 'completed' : '' }}">
                                         <div class="timeline-marker bg-success"></div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Pesanan Diterima</h6>
-                                            <p class="timeline-description">Pesanan Anda telah berhasil diterima</p>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-receipt me-1"></i>Pesanan Diterima
+                                            </h6>
+                                            <p class="timeline-description">
+                                                @if ($order->status === 'pending')
+                                                    <div class="alert alert-warning mb-0 py-2">
+                                                        <i class="fas fa-clock me-2"></i>
+                                                        <strong>Status Saat Ini: Menunggu Konfirmasi</strong>
+                                                    </div>
+                                                @else
+                                                    Pesanan Anda telah berhasil diterima
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
 
@@ -108,8 +130,19 @@ $badgeColors = [
                                             class="timeline-marker {{ in_array($order->status, ['confirmed', 'processing', 'shipped', 'delivered']) ? 'bg-success' : 'bg-secondary' }}">
                                         </div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Pesanan Dikonfirmasi</h6>
-                                            <p class="timeline-description">Pesanan Anda telah dikonfirmasi</p>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-check me-1"></i>Pesanan Dikonfirmasi
+                                            </h6>
+                                            <p class="timeline-description">
+                                                @if ($order->status === 'confirmed')
+                                                    <div class="alert alert-info mb-0 py-2">
+                                                        <i class="fas fa-check me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Dikonfirmasi</strong>
+                                                    </div>
+                                                @else
+                                                    Pesanan Anda telah dikonfirmasi
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
 
@@ -119,8 +152,19 @@ $badgeColors = [
                                             class="timeline-marker {{ in_array($order->status, ['processing', 'shipped', 'delivered']) ? 'bg-success' : 'bg-secondary' }}">
                                         </div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Sedang Diproses</h6>
-                                            <p class="timeline-description">Pesanan Anda sedang disiapkan</p>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-cogs me-1"></i>Sedang Diproses
+                                            </h6>
+                                            <p class="timeline-description">
+                                                @if ($order->status === 'processing')
+                                                    <div class="alert alert-primary mb-0 py-2">
+                                                        <i class="fas fa-cogs me-2"></i>
+                                                        <strong>Status Saat Ini: Sedang Diproses</strong>
+                                                    </div>
+                                                @else
+                                                    Pesanan Anda sedang disiapkan
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
 
@@ -130,20 +174,36 @@ $badgeColors = [
                                             class="timeline-marker {{ in_array($order->status, ['shipped', 'delivered']) ? 'bg-success' : 'bg-secondary' }}">
                                         </div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Dikirim</h6>
-                                            <p class="timeline-description">Pesanan Anda sedang dalam perjalanan</p>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-shipping-fast me-1"></i>Dikirim
+                                            </h6>
+                                            <p class="timeline-description">
+                                                @if ($order->status === 'shipped')
+                                                    <div class="alert alert-info mb-0 py-2">
+                                                        <i class="fas fa-shipping-fast me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Sedang Dikirim</strong>
+                                                    </div>
+                                                @else
+                                                    Pesanan Anda sedang dalam perjalanan
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
 
                                     <div class="timeline-item {{ $order->status === 'delivered' ? 'completed' : '' }}">
                                         <div
-                                            class="timeline-marker {{ $order->status === 'delivered' ? 'bg-primary' : 'bg-secondary' }}">
+                                            class="timeline-marker {{ $order->status === 'delivered' ? 'bg-success' : 'bg-secondary' }}">
                                         </div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Diterima</h6>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-check-circle me-1"></i>Diterima
+                                            </h6>
                                             <p class="timeline-description">
                                                 @if ($order->status === 'delivered')
-                                                    <span class="text-primary fw-bold">Status Saat Ini</span>
+                                                    <div class="alert alert-success mb-0 py-2">
+                                                        <i class="fas fa-check-circle me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Telah Diterima</strong>
+                                                    </div>
                                                 @else
                                                     Pesanan telah diterima oleh pelanggan
                                                 @endif
@@ -152,19 +212,58 @@ $badgeColors = [
                                     </div>
                                     <div class="timeline-item {{ $order->status === 'completed' ? 'completed' : '' }}">
                                         <div
-                                            class="timeline-marker {{ $order->status === 'completed' ? 'bg-dark' : 'bg-secondary' }}">
+                                            class="timeline-marker {{ $order->status === 'completed' ? 'bg-success' : 'bg-secondary' }}">
                                         </div>
                                         <div class="timeline-content">
-                                            <h6 class="timeline-title">Selesai</h6>
+                                            <h6 class="timeline-title">
+                                                <i class="fas fa-check-circle me-1"></i>Selesai
+                                            </h6>
                                             <p class="timeline-description">
                                                 @if ($order->status === 'completed')
-                                                    <span class="text-dark fw-bold">Status Saat Ini</span>
+                                                    <div class="alert alert-success mb-0 py-2">
+                                                        <i class="fas fa-check-double me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Telah Selesai</strong>
+                                                    </div>
                                                 @else
                                                     Pesanan telah selesai dan ditutup
                                                 @endif
                                             </p>
                                         </div>
                                     </div>
+
+                                    @if ($order->status === 'cancelled')
+                                        <div class="timeline-item completed">
+                                            <div class="timeline-marker bg-danger"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="timeline-title">
+                                                    <i class="fas fa-times-circle me-1"></i>Dibatalkan
+                                                </h6>
+                                                <p class="timeline-description">
+                                                    <div class="alert alert-danger mb-0 py-2">
+                                                        <i class="fas fa-times-circle me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Dibatalkan</strong>
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if ($order->status === 'refunded')
+                                        <div class="timeline-item completed">
+                                            <div class="timeline-marker bg-secondary"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="timeline-title">
+                                                    <i class="fas fa-undo me-1"></i>Dikembalikan
+                                                </h6>
+                                                <p class="timeline-description">
+                                                    <div class="alert alert-secondary mb-0 py-2">
+                                                        <i class="fas fa-undo me-2"></i>
+                                                        <strong>Status Saat Ini: Pesanan Dikembalikan</strong>
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

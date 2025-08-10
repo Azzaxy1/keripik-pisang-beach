@@ -72,6 +72,8 @@ class RoleAndPermissionSeeder extends Seeder
             $customer1 = User::create([
                 'name' => 'Pelanggan Keripik',
                 'email' => 'customer@example.com',
+                'phone' => '081234567890',
+                'address' => 'Jl. Contoh Alamat No. 123',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
                 'is_active' => true
