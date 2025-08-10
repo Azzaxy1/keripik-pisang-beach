@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -42,9 +43,51 @@ class OrderController extends Controller
         } else {
             $query->latest();
         }
+        
         $orders = $query->paginate(15);
+        
+        // Calculate total keseluruhan
+        $totalKeseluruhan = Order::where('payment_status', 'paid')->sum('total_amount');
+        $totalBulanIni = Order::where('payment_status', 'paid')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('total_amount');
 
-        return view('admin.orders.index', compact('orders'));
+        // Calculate total pemesanan - Semua kecuali yang dibatalkan
+        $totalPesananKeseluruhan = Order::where('status', '!=', 'cancelled')->count();
+        $totalPesananBulanIni = Order::where('status', '!=', 'cancelled')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // Calculate total produk terjual - Yang sudah dibayar dan tidak dibatalkan
+        $totalProdukTerjualKeseluruhan = Order::where('payment_status', 'paid')
+            ->where('status', '!=', 'cancelled')
+            ->with('items')
+            ->get()
+            ->sum(function($order) {
+                return $order->items->sum('quantity');
+            });
+
+        $totalProdukTerjualBulanIni = Order::where('payment_status', 'paid')
+            ->where('status', '!=', 'cancelled')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->with('items')
+            ->get()
+            ->sum(function($order) {
+                return $order->items->sum('quantity');
+            });
+
+        return view('admin.orders.index', compact(
+            'orders', 
+            'totalKeseluruhan', 
+            'totalBulanIni',
+            'totalPesananKeseluruhan',
+            'totalPesananBulanIni',
+            'totalProdukTerjualKeseluruhan',
+            'totalProdukTerjualBulanIni'
+        ));
     }
 
     public function show(Order $order)
@@ -153,5 +196,40 @@ class OrderController extends Controller
 
         return redirect()->route('admin.orders.index')
             ->with('success', 'Pesanan berhasil dihapus.');
+    }
+
+    public function monthlyReport(Request $request)
+    {
+        $month = $request->get('month', now()->month);
+        $year = $request->get('year', now()->year);
+
+        // Laporan hanya menampilkan pesanan yang sudah dibayar dan tidak dibatalkan
+        $orders = Order::with(['user', 'items.product'])
+            ->where('payment_status', 'paid') // Hanya pesanan yang sudah dibayar
+            ->where('status', '!=', 'cancelled') // Tidak termasuk yang dibatalkan
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalRevenue = $orders->sum('total_amount');
+        $totalOrders = $orders->count();
+        $totalProductsSold = $orders->sum(function($order) {
+            return $order->items->sum('quantity');
+        });
+
+        $monthName = now()->month($month)->format('F');
+
+        $pdf = Pdf::loadView('admin.orders.monthly-report', compact(
+            'orders', 
+            'totalRevenue', 
+            'totalOrders',
+            'totalProductsSold',
+            'month', 
+            'year', 
+            'monthName'
+        ));
+
+        return $pdf->download("laporan-pemesanan-{$monthName}-{$year}.pdf");
     }
 }

@@ -9,11 +9,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Dashboard statistics
+        // Dashboard statistics dengan logika bisnis yang benar
         $totalProducts = \App\Models\Product::count();
-        $totalOrders = \App\Models\Order::count();
+        $totalOrders = \App\Models\Order::where('status', '!=', 'cancelled')->count(); // Semua kecuali yang dibatalkan
         $totalUsers = \App\Models\User::role('customer')->count();
-        $totalRevenue = \App\Models\Order::where('payment_status', 'paid')->sum('total_amount');
+        $totalRevenue = \App\Models\Order::where('payment_status', 'paid')->sum('total_amount'); // Hanya yang sudah dibayar
 
         // Recent orders
         $recentOrders = \App\Models\Order::with(['user', 'items.product'])

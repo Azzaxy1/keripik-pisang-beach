@@ -32,6 +32,100 @@
                     </div>
                 @endif
 
+                <!-- Statistik dan Tombol Cetak -->
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <!-- Total Pendapatan -->
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><i class="fas fa-money-bill-wave text-success"></i> Total Pendapatan</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h4 class="text-success mb-1">Rp {{ number_format($totalKeseluruhan, 0, ',', '.') }}</h4>
+                                                <small class="text-muted">Keseluruhan (Lunas)</small>
+                                            </div>
+                                            <div class="col-6">
+                                                <h4 class="text-primary mb-1">Rp {{ number_format($totalBulanIni, 0, ',', '.') }}</h4>
+                                                <small class="text-muted">{{ now()->format('M Y') }} (Lunas)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Pesanan -->
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><i class="fas fa-shopping-cart text-info"></i> Total Pesanan</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h4 class="text-success mb-1">{{ number_format($totalPesananKeseluruhan) }}</h4>
+                                                <small class="text-muted">Keseluruhan (Aktif)</small>
+                                            </div>
+                                            <div class="col-6">
+                                                <h4 class="text-primary mb-1">{{ number_format($totalPesananBulanIni) }}</h4>
+                                                <small class="text-muted">{{ now()->format('M Y') }} (Aktif)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Produk Terjual -->
+                            <div class="col-md-12 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title"><i class="fas fa-box text-warning"></i> Total Produk Terjual</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h4 class="text-success mb-1">{{ number_format($totalProdukTerjualKeseluruhan) }} pcs</h4>
+                                                <small class="text-muted">Keseluruhan (Lunas & Aktif)</small>
+                                            </div>
+                                            <div class="col-6">
+                                                <h4 class="text-primary mb-1">{{ number_format($totalProdukTerjualBulanIni) }} pcs</h4>
+                                                <small class="text-muted">{{ now()->format('F Y') }} (Lunas & Aktif)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title"><i class="fas fa-file-pdf"></i> Laporan PDF</h5>
+                                <form method="GET" action="{{ route('admin.orders.monthly-report') }}" class="mb-3">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <select name="month" class="form-select form-select-sm" required>
+                                                @for($i = 1; $i <= 12; $i++)
+                                                    <option value="{{ $i }}" {{ $i == now()->month ? 'selected' : '' }}>
+                                                        {{ \Carbon\Carbon::create()->month($i)->format('F') }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <select name="year" class="form-select form-select-sm" required>
+                                                @for($year = now()->year; $year >= 2020; $year--)
+                                                    <option value="{{ $year }}">{{ $year }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger mt-2">
+                                        <i class="fas fa-download"></i> Download Laporan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">

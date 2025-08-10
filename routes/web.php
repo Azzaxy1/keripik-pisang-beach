@@ -104,6 +104,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('orders/{order}/note', [OrderController::class, 'addNote'])->name('orders.addNote');
     Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+    Route::get('orders/report/monthly', [OrderController::class, 'monthlyReport'])->name('orders.monthly-report');
 
     // Users Management
     Route::resource('users', UserController::class);
