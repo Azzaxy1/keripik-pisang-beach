@@ -46,7 +46,7 @@ class CheckoutController extends Controller
             'account_name' => 'Bagus Hernadi'
         ];
 
-        return view('frontend.checkout-keripik', compact('cartItems', 'subtotal', 'tax', 'shipping', 'total', 'bankAccount'));
+        return view('frontend.checkout-keripik', compact('cartItems', 'subtotal', 'tax', 'shipping', 'total', 'bankAccount', 'user'));
     }
 
     /**
@@ -60,9 +60,6 @@ class CheckoutController extends Controller
             $request->validate([
                 'payment_method' => 'required|in:bank_transfer',
                 'payment_proof' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'customer_name' => 'required|string|max:255',
-                'customer_phone' => 'required|string|max:20',
-                'customer_address' => 'required|string|max:500',
                 'courier_service' => 'required|string',
                 'order_notes' => 'nullable|string|max:1000',
             ]);
@@ -112,11 +109,11 @@ class CheckoutController extends Controller
                 $orderNumber = 'KP-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
             }
 
-            // Data alamat customer
+            // Data alamat customer dari data user yang sudah terdaftar
             $customerData = [
-                'name' => $request->customer_name,
-                'phone' => $request->customer_phone,
-                'address' => $request->customer_address
+                'name' => $user->name,
+                'phone' => $user->phone,
+                'address' => $user->address
             ];
 
             // Info rekening bank BCA

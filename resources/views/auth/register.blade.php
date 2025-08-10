@@ -17,6 +17,7 @@
 
                                 <div class="col-md-6">
                                     <input id="name" type="text"
+                                        placeholder="Nama Lengkap"
                                         class="form-control @error('name') is-invalid @enderror" name="name"
                                         value="{{ old('name') }}" required autocomplete="name" autofocus>
 
@@ -34,10 +35,48 @@
 
                                 <div class="col-md-6">
                                     <input id="email" type="email"
+                                        placeholder="example@mail.com"
                                         class="form-control @error('email') is-invalid @enderror" name="email"
                                         value="{{ old('email') }}" required autocomplete="email">
 
                                     @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="phone"
+                                    class="col-md-4 col-form-label text-md-end">Nomor WhatsApp</label>
+
+                                <div class="col-md-6">
+                                    <input id="phone" type="text"
+                                        class="form-control @error('phone') is-invalid @enderror" name="phone"
+                                        value="{{ old('phone') }}" required 
+                                        placeholder="081234567890" maxlength="12" pattern="[0-9]{10,12}">
+                                    <small class="text-muted">Contoh: 081234567890 (hanya angka, maksimal 12 digit)</small>
+
+                                    @error('phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="address"
+                                    class="col-md-4 col-form-label text-md-end">Alamat Lengkap</label>
+
+                                <div class="col-md-6">
+                                    <textarea id="address" 
+                                        class="form-control @error('address') is-invalid @enderror" 
+                                        name="address" rows="3" required 
+                                        placeholder="Jl. Nama Jalan No. XX, RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten">{{ old('address') }}</textarea>
+
+                                    @error('address')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -51,6 +90,7 @@
 
                                 <div class="col-md-6">
                                     <input id="password" type="password"
+                                        placeholder='Minimal 8 karakter'
                                         class="form-control @error('password') is-invalid @enderror" name="password"
                                         required autocomplete="new-password">
 
@@ -68,7 +108,8 @@
 
                                 <div class="col-md-6">
                                     <input id="password-confirm" type="password" class="form-control"
-                                        name="password_confirmation" required autocomplete="new-password">
+                                        name="password_confirmation" required autocomplete="new-password"
+                                        placeholder='Minimal 8 karakter'>
                                 </div>
                             </div>
 
@@ -87,3 +128,28 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('phone');
+    
+    phoneInput.addEventListener('input', function (e) {
+        // Hapus semua karakter non-digit
+        this.value = this.value.replace(/\D/g, '');
+        
+        // Batasi maksimal 12 digit
+        if (this.value.length > 12) {
+            this.value = this.value.slice(0, 12);
+        }
+    });
+
+    phoneInput.addEventListener('keypress', function (e) {
+        // Hanya izinkan angka
+        if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab') {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+@endpush

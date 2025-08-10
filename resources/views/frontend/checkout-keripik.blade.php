@@ -30,31 +30,23 @@
                             <!-- Info Customer -->
                             <div class="mb-4">
                                 <h6>Data Pelanggan</h6>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="customer_name" class="form-label">Nama Lengkap *</label>
-                                            <input type="text" class="form-control" id="customer_name"
-                                                name="customer_name"
-                                                value="{{ old('customer_name', auth()->user()->name) }}" required>
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Nama:</strong> {{ $user->name }}</p>
+                                                <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>WhatsApp:</strong> {{ $user->phone }}</p>
+                                                <p class="mb-0"><strong>Alamat:</strong> {{ $user->address }}</p>
+                                            </div>
                                         </div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle"></i> 
+                                            Data diambil dari saat pendaftaran  .
+                                        </small>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="customer_phone" class="form-label">No. WhatsApp *</label>
-                                            <input type="tel" class="form-control" id="customer_phone"
-                                                name="customer_phone" value="{{ old('customer_phone') }}"
-                                                placeholder="08xxxxxxxxxx" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="customer_address" class="form-label">Alamat Lengkap *</label>
-                                    <textarea class="form-control" id="customer_address" name="customer_address" rows="3"
-                                        placeholder="Jl. Nama Jalan No. XX, RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten" required>{{ old('customer_address') }}</textarea>
-                                    <small class="text-muted">Masukkan alamat lengkap untuk pengiriman keripik
-                                        pisang</small>
                                 </div>
                             </div>
 
