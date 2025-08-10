@@ -267,7 +267,7 @@
 
             <div class="section">
                 <h4>Detail Pembayaran:</h4>
-                <p><strong>Metode:</strong> Transfer Bank</p>
+                <p><strong>Metode:</strong> Transfer E-Wallet</p>
                 <p><strong>Status:</strong>
                     @php
                         $paymentStatusTranslations = [
@@ -360,7 +360,7 @@
             <p>Invoice ini digenerate otomatis oleh sistem pada {{ now()->format('d M Y, H:i') }}</p>
             <p>Untuk pertanyaan mengenai invoice ini, silakan hubungi customer service kami.</p>
             <p style="margin-top: 20px;">
-                <strong>Keripik Pisang Beach</strong> - Keripik Pisang Terbaik di Bali<br>
+                <strong>Keripik Pisang Beach</strong> - Keripik Pisang Terbaik di Banten<br>
                 Website: www.keripikpisangbeach.com | Instagram: @keripikpisangbeach
             </p>
         </div>

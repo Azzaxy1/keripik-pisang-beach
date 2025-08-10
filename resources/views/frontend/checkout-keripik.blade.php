@@ -62,11 +62,12 @@
                             <div class="mb-4">
                                 <h6><i class="fas fa-credit-card"></i> Metode Pembayaran</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment_method" id="bank_transfer"
+                                    {{-- SIBAGUS MENGUBAH "value" INI --}}
+                                    <input class="form-check-input" type="radio" name="payment_method" id="transfer"
                                         value="bank_transfer" checked>
-                                    <label class="form-check-label" for="bank_transfer">
-                                        <strong>Transfer Bank BCA</strong>
-                                        <small class="d-block text-muted">Transfer ke rekening BCA yang tersedia</small>
+                                    <label class="form-check-label" for="transfer">
+                                        <strong>Transfer E-Wallet DANA</strong>
+                                        <small class="d-block text-muted">Transfer ke rekening yang tersedia</small>
                                     </label>
                                 </div>
                             </div>

@@ -41,9 +41,9 @@ class CheckoutController extends Controller
 
         // Info rekening BCA / PERUBAHAN TRANSFER
         $bankAccount = [
-            'bank_name' => 'Bank BCA',
-            'account_number' => '1314151617',
-            'account_name' => 'Keripik Pisang Beach'
+            'bank_name' => 'Dana',
+            'account_number' => '081952049181',
+            'account_name' => 'Bagus Hernadi'
         ];
 
         return view('frontend.checkout-keripik', compact('cartItems', 'subtotal', 'tax', 'shipping', 'total', 'bankAccount'));
