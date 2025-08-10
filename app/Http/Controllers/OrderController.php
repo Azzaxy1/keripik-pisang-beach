@@ -52,7 +52,7 @@ class OrderController extends Controller
         }
 
         // Only allow download if order is completed/delivered
-        if (!in_array($order->status, ['delivered', 'shipped'])) {
+        if (!in_array($order->status, ['delivered', 'shipped', 'completed'])) {
             return redirect()->back()->with('error', 'Invoice can only be downloaded for completed/delivered orders.');
         }
 

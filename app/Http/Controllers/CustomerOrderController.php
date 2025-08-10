@@ -26,13 +26,13 @@ class CustomerOrderController extends Controller
     // Check if order can be completed
     if (!$order->canBeCompletedByCustomer()) {
       return redirect()->route('orders.show', $order->id)
-        ->with('error', 'Order belum bisa ditandai selesai. Pastikan pesanan sudah diterima.');
+        ->with('error', 'Order belum bisa dikonfirmasi diterima. Pastikan pesanan sudah dikirim oleh penjual.');
     }
 
     // Mark as completed
     $order->markAsCompleted();
 
     return redirect()->route('orders.show', $order->id)
-      ->with('success', 'Terima kasih! Pesanan telah ditandai selesai.');
+      ->with('success', 'Terima kasih! Pesanan telah dikonfirmasi diterima.');
   }
 }

@@ -432,7 +432,7 @@ $badgeColors = [
                                     onsubmit="return confirm('Apakah Anda yakin telah menerima pesanan ini dengan baik?')">
                                     @csrf
                                     <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-check-circle me-1"></i> Pesanan Selesai
+                                        <i class="fas fa-check-circle me-1"></i> Pesanan Diterima
                                     </button>
                                 </form>
                             @endif
@@ -440,7 +440,7 @@ $badgeColors = [
                             @if ($order->getAttribute('completed_at'))
                                 <div class="alert alert-success">
                                     <i class="fas fa-check-circle me-1"></i>
-                                    Pesanan ditandai selesai pada
+                                    Pesanan dikonfirmasi diterima pada
                                     {{ $order->getAttribute('completed_at')->format('d M Y H:i') }}
                                 </div>
                             @endif
