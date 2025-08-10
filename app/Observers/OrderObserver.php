@@ -28,6 +28,11 @@ class OrderObserver
             if ($newStatus === Order::STATUS_CANCELLED && $oldStatus !== Order::STATUS_CANCELLED) {
                 $order->restoreStock();
             }
+
+            // If status changed to completed, update sold count
+            if ($newStatus === Order::STATUS_COMPLETED && $oldStatus !== Order::STATUS_COMPLETED) {
+                $order->updateProductSoldCount();
+            }
         }
     }
 

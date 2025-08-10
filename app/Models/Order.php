@@ -157,10 +157,7 @@ class Order extends Model
         $this->setAttribute('completed_at', now());
         $this->save();
 
-        // Update sold count produk jika status berubah dari delivered ke completed
-        if ($oldStatus === self::STATUS_DELIVERED) {
-            $this->updateProductSoldCount();
-        }
+        // Observer akan handle update sold count saat status berubah menjadi completed
     }
 
     /**
